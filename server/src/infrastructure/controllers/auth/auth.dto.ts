@@ -37,3 +37,15 @@ export class ConfirmRegisterDto {
   @IsNotEmpty()
   activationCode: string
 }
+
+export class LoginDto {
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  email: string
+
+  @IsString()
+  @MinLength(8)
+  @IsNotEmpty()
+  password: string
+}

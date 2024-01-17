@@ -1,10 +1,19 @@
-import { Body, Controller, Inject, Post, Request } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Request,
+  UseGuards
+} from '@nestjs/common'
 import { Request as RequestExpress } from 'express'
 import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecase-proxy'
 import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecase-proxy.module'
 import { RegisterUseCases } from 'src/usecases/auth/register.usecase'
 import { LoginUseCases } from 'src/usecases/auth/login.usecase'
 import { ConfirmRegisterDto, RegisterUserDto } from './auth.dto'
+import { LoginGuard } from 'src/infrastructure/guards/login.guard'
+import { IRequestWithUser } from 'src/domain/types/request.type'
 
 @Controller('auth')
 export class AuthController {
@@ -41,5 +50,23 @@ export class AuthController {
       )
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie])
     return { user }
+  }
+
+  @Post('login')
+  @UseGuards(LoginGuard)
+  async login(@Request() req: IRequestWithUser) {
+    const { user } = req
+    const accessTokenCookie =
+      await this.LoginUsecaseProxy.getInstance().getCookieWithJwtToken(
+        user.id,
+        user.username
+      )
+    const refreshTokenCookie =
+      await this.LoginUsecaseProxy.getInstance().getCookieWithJwtRefreshToken(
+        user.id,
+        user.username
+      )
+    req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie])
+    return user
   }
 }

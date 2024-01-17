@@ -6,7 +6,6 @@ import {
 import { IHashService } from 'src/domain/adapters/hash.interface'
 import { UserRepository } from 'src/domain/repositories/userRepositoryIInterface'
 import { removeObjectKey } from 'src/helpers/removeKey.helper'
-import { UserWithoutPassword } from 'src/domain/model/user'
 
 export class LoginUseCases {
   constructor(
@@ -41,8 +40,7 @@ export class LoginUseCases {
     }
     const match = await this.hashService.compare(password, user.password)
     if (user && match) {
-      const safeUser: UserWithoutPassword = removeObjectKey(user, 'password')
-      return safeUser
+      return user
     }
     return null
   }
