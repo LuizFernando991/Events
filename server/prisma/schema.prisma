@@ -17,8 +17,9 @@ model User {
   updatedAt DateTime @updatedAt
 
   events                Event[]
-  invitationsAsReceiver Invitation[] @relation("asReceiver")
-  invitationsAsSender   Invitation[] @relation("asSender")
+  notifications         Notification[]
+  invitationsAsReceiver Invitation[]   @relation("asReceiver")
+  invitationsAsSender   Invitation[]   @relation("asSender")
 }
 
 model Event {
@@ -30,6 +31,8 @@ model Event {
   finalDate    DateTime
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  notifications Notification[]
 }
 
 enum NotificationType {
@@ -38,11 +41,16 @@ enum NotificationType {
 }
 
 model Notification {
-  id          Int              @id @default(autoincrement())
-  title       String
-  viewed      Boolean          @default(false)
-  type        NotificationType
-  description String
+  id           Int              @id @default(autoincrement())
+  title        String
+  description  String
+  viewed       Boolean          @default(false)
+  type         NotificationType
+  toUserId     Int
+  aboutEventId Int
+
+  aboutEvent Event @relation(fields: [aboutEventId], references: [id], onDelete: Cascade)
+  toUser     User  @relation(fields: [toUserId], references: [id], onDelete: Cascade)
 }
 
 enum InvitationStatus {
@@ -58,6 +66,6 @@ model Invitation {
   fromUserId Int
   toUserId   Int
 
-  toUser   User @relation(fields: [toUserId], references: [id], name: "asReceiver")
-  fromUser User @relation(fields: [fromUserId], references: [id], name: "asSender")
+  toUser   User @relation(fields: [toUserId], references: [id], name: "asReceiver", onDelete: Cascade)
+  fromUser User @relation(fields: [fromUserId], references: [id], name: "asSender", onDelete: Cascade)
 }
