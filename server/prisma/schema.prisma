@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events                Event[]
+  invitationsAsReceiver Invitation[] @relation("asReceiver")
+  invitationsAsSender   Invitation[] @relation("asSender")
+}
+
+model Event {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  participants User[]
+  inicialDate  DateTime
+  finalDate    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum NotificationType {
+  canceled
+  updated
+}
+
+model Notification {
+  id          Int              @id @default(autoincrement())
+  title       String
+  viewed      Boolean          @default(false)
+  type        NotificationType
+  description String
+}
+
+enum InvitationStatus {
+  opening
+  rejected
+  accept
+}
+
+model Invitation {
+  id         Int              @id @default(autoincrement())
+  status     InvitationStatus @default(opening)
+  eventId    Int
+  fromUserId Int
+  toUserId   Int
+
+  toUser   User @relation(fields: [toUserId], references: [id], name: "asReceiver")
+  fromUser User @relation(fields: [fromUserId], references: [id], name: "asSender")
+}
