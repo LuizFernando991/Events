@@ -16,6 +16,7 @@ import { LoginGuard } from 'src/infrastructure/guards/login.guard'
 import { IRequestWithUser } from 'src/domain/types/request.type'
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwtAuth.guard'
 import { LogoutUseCases } from 'src/usecases/auth/logout.usercase'
+import JwtRefreshGuard from 'src/infrastructure/guards/jwtRefresh.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -79,6 +80,18 @@ export class AuthController {
   async logout(@Request() request: IRequestWithUser) {
     const cookie = await this.LogoutUsecaseProxy.getInstance().execute()
     request.res.setHeader('Set-Cookie', cookie)
+    return
+  }
+
+  @Post('refresh')
+  @UseGuards(JwtRefreshGuard)
+  async refresh(@Request() request: IRequestWithUser) {
+    const accessTokenCookie =
+      await this.LoginUsecaseProxy.getInstance().getCookieWithJwtToken(
+        request.user.id,
+        request.user.username
+      )
+    request.res.setHeader('Set-Cookie', accessTokenCookie)
     return
   }
 }
