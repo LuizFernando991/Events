@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  HttpCode,
+  HttpStatus,
   Inject,
   Post,
   Request,
@@ -58,6 +60,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(LoginGuard)
   async login(@Request() req: IRequestWithUser) {
     const { user } = req
@@ -76,6 +79,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   async logout(@Request() request: IRequestWithUser) {
     const cookie = await this.LogoutUsecaseProxy.getInstance().execute()
@@ -84,6 +88,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(JwtRefreshGuard)
   async refresh(@Request() request: IRequestWithUser) {
     const accessTokenCookie =
