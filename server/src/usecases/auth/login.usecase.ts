@@ -45,8 +45,8 @@ export class LoginUseCases {
     return null
   }
 
-  async validateUserForJWTStragtegy(email: string) {
-    const user = await this.userRepository.getUserByEmail(email)
+  async validateUserForJWTStragtegy(id: number) {
+    const user = await this.userRepository.getUserById(id)
     if (!user) {
       return null
     }
@@ -61,8 +61,8 @@ export class LoginUseCases {
     )
   }
 
-  async getUserIfRefreshTokenMatches(refreshToken: string, email: string) {
-    const user = await this.userRepository.getUserByEmail(email)
+  async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
+    const user = await this.userRepository.getUserById(id)
     if (!user || !user.hashRefreshToken) {
       return null
     }

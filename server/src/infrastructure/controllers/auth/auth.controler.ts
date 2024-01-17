@@ -14,6 +14,8 @@ import { LoginUseCases } from 'src/usecases/auth/login.usecase'
 import { ConfirmRegisterDto, RegisterUserDto } from './auth.dto'
 import { LoginGuard } from 'src/infrastructure/guards/login.guard'
 import { IRequestWithUser } from 'src/domain/types/request.type'
+import { JwtAuthGuard } from 'src/infrastructure/guards/jwtAuth.guard'
+import { LogoutUseCases } from 'src/usecases/auth/logout.usercase'
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +23,9 @@ export class AuthController {
     @Inject(UsecasesProxyModule.REGISTER_USECASES_PROXY)
     private readonly RegisterUsecaseProxy: UseCaseProxy<RegisterUseCases>,
     @Inject(UsecasesProxyModule.LOGIN_USECASES_PROXY)
-    private readonly LoginUsecaseProxy: UseCaseProxy<LoginUseCases>
+    private readonly LoginUsecaseProxy: UseCaseProxy<LoginUseCases>,
+    @Inject(UsecasesProxyModule.LOGOUT_USECASES_PROXY)
+    private readonly LogoutUsecaseProxy: UseCaseProxy<LogoutUseCases>
   ) {}
 
   @Post('register')
@@ -68,5 +72,13 @@ export class AuthController {
       )
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie])
     return user
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Request() request: IRequestWithUser) {
+    const cookie = await this.LogoutUsecaseProxy.getInstance().execute()
+    request.res.setHeader('Set-Cookie', cookie)
+    return
   }
 }

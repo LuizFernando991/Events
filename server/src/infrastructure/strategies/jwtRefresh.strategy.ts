@@ -36,7 +36,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     const user =
       this.LoginUsecaseProxy.getInstance().getUserIfRefreshTokenMatches(
         refreshToken,
-        payload.username
+        payload.id
       )
     if (!user) {
       this.exceptionService.UnauthorizedException({

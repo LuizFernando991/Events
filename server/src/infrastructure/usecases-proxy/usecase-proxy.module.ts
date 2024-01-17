@@ -14,6 +14,7 @@ import { HashModule } from '../services/hash/hash.module'
 import { LoginUseCases } from 'src/usecases/auth/login.usecase'
 import { ExceptionsService } from '../exceptions/exception.service'
 import { ExceptionsModule } from '../exceptions/exceptions.module'
+import { LogoutUseCases } from 'src/usecases/auth/logout.usercase'
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ExceptionsModule } from '../exceptions/exceptions.module'
 export class UsecasesProxyModule {
   static REGISTER_USECASES_PROXY = 'RegisterUseCasesProxy'
   static LOGIN_USECASES_PROXY = 'LoginUseCasesProxy'
+  static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -84,11 +86,17 @@ export class UsecasesProxyModule {
                 hashService
               )
             )
+        },
+        {
+          inject: [],
+          provide: UsecasesProxyModule.LOGOUT_USECASES_PROXY,
+          useFactory: () => new UseCaseProxy(new LogoutUseCases())
         }
       ],
       exports: [
         UsecasesProxyModule.REGISTER_USECASES_PROXY,
-        UsecasesProxyModule.LOGIN_USECASES_PROXY
+        UsecasesProxyModule.LOGIN_USECASES_PROXY,
+        UsecasesProxyModule.LOGOUT_USECASES_PROXY
       ]
     }
   }
