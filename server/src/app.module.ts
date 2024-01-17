@@ -5,6 +5,7 @@ import { EnvironmentConfigModule } from './infrastructure/config/environment-con
 import { PassportModule } from '@nestjs/passport'
 import { JwtModule } from '@nestjs/jwt'
 import { JwtModule as JwtServiceModule } from './infrastructure/services/jwt/jwt.module'
+import { ControllersModule } from './infrastructure/controllers/controllers.module'
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { JwtModule as JwtServiceModule } from './infrastructure/services/jwt/jwt
     }),
     PrismaModule,
     EnvironmentConfigModule,
-    JwtServiceModule
+    JwtServiceModule,
+    ControllersModule
   ],
   controllers: [],
   providers: []
