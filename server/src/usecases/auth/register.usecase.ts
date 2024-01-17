@@ -1,8 +1,8 @@
 import { IEmailsender } from 'src/domain/adapters/emailsender.interface'
 import { IHashService } from 'src/domain/adapters/hash.interface'
 import { IJwtService } from 'src/domain/adapters/jwt.interface'
-import { EnviromentConfig } from 'src/domain/config/enviroment.interface'
-import { UserWithoutPassword } from 'src/domain/model/user'
+import { IEnviromentConfig } from 'src/domain/config/enviroment.interface'
+import { IException } from 'src/domain/exceptions/exceptions.interface'
 import { UserRepository } from 'src/domain/repositories/userRepositoryIInterface'
 import { RegisterUserType } from 'src/domain/types/user.types'
 import { removeObjectKey } from 'src/helpers/removeKey.helper'
@@ -10,10 +10,11 @@ import { removeObjectKey } from 'src/helpers/removeKey.helper'
 export class RegisterUseCases {
   constructor(
     private readonly jwtTokenService: IJwtService,
-    private readonly enviromentConfig: EnviromentConfig,
+    private readonly enviromentConfig: IEnviromentConfig,
     private readonly userRepository: UserRepository,
     private readonly emailSender: IEmailsender,
-    private readonly hashService: IHashService
+    private readonly hashService: IHashService,
+    private readonly exceptionService: IException
   ) {}
 
   private async createActivationToken(user: RegisterUserType) {
@@ -39,10 +40,16 @@ export class RegisterUseCases {
   }
 
   async register(user: RegisterUserType) {
-    const existsUser = await this.userRepository.getUserByEmail(user.email)
+    const existsUser = await this.userRepository.getExistsUser(
+      user.email,
+      user.username
+    )
 
     if (!!existsUser) {
-      return null //throw new error
+      this.exceptionService.badRequestException({
+        message: 'User already exists.',
+        code_error: 400
+      })
     }
 
     const hashPassword = await this.hashService.hash(user.password)
@@ -71,13 +78,31 @@ export class RegisterUseCases {
       secret
     )
 
+    const existsUser = await this.userRepository.getExistsUser(
+      payload.user.email,
+      payload.user.username
+    )
+
+    if (!!existsUser) {
+      this.exceptionService.badRequestException({
+        message: 'User already exists.',
+        code_error: 400
+      })
+    }
+
     if (!payload || code !== payload.code) {
-      return null //throw new error (bad request)
+      this.exceptionService.badRequestException({
+        message: 'invalid code',
+        code_error: 400
+      })
     }
 
     const newUser = await this.userRepository.insert(payload.user)
 
-    const safeUser: UserWithoutPassword = removeObjectKey(newUser, 'password')
+    let safeUser = removeObjectKey(newUser, 'password')
+    if (newUser.hashRefreshToken) {
+      safeUser = removeObjectKey(safeUser, 'hashRefreshToken')
+    }
 
     return { user: safeUser }
   }

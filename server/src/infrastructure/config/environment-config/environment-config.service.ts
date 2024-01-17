@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { EnviromentConfig } from 'src/domain/config/enviroment.interface'
+import { IEnviromentConfig } from 'src/domain/config/enviroment.interface'
 
 @Injectable()
-export class EnvironmentConfigService implements EnviromentConfig {
+export class EnvironmentConfigService implements IEnviromentConfig {
   constructor(private configService: ConfigService) {}
 
   getJwtSecret(): string {

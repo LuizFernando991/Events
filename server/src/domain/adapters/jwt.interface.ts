@@ -2,6 +2,7 @@ import { RegisterUserType } from '../types/user.types'
 
 export interface IJwtServicePayload {
   id: number
+  username: string
 }
 
 export interface IJwtServiceActivationTokenPayload {

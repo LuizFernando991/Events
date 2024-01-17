@@ -11,14 +11,22 @@ export class JwtTokenService implements IJwtService {
   constructor(private readonly jwtService: JwtService) {}
 
   async checkToken(token: string, secret: string): Promise<any> {
-    return await this.jwtService.verifyAsync(token, { secret })
+    try {
+      return await this.jwtService.verifyAsync(token, { secret })
+    } catch {
+      return null
+    }
   }
 
   async checkActiovationToken(
     token: string,
     secret: string
   ): Promise<IJwtServiceActivationTokenPayload> {
-    return await this.jwtService.verifyAsync(token, { secret })
+    try {
+      return await this.jwtService.verifyAsync(token, { secret })
+    } catch {
+      return null
+    }
   }
 
   createActivationToken(

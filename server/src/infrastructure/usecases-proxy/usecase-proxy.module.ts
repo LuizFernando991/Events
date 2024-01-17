@@ -11,6 +11,9 @@ import { EmailService } from '../services/email/email.service'
 import { EmailModule } from '../services/email/email.module'
 import { HashService } from '../services/hash/hash.service'
 import { HashModule } from '../services/hash/hash.module'
+import { LoginUseCases } from 'src/usecases/auth/login.usecase'
+import { ExceptionsService } from '../exceptions/exception.service'
+import { ExceptionsModule } from '../exceptions/exceptions.module'
 
 @Module({
   imports: [
@@ -18,11 +21,14 @@ import { HashModule } from '../services/hash/hash.module'
     JwtModule,
     RepositoriesModule,
     EmailModule,
-    HashModule
+    HashModule,
+    ExceptionsModule
   ]
 })
 export class UsecasesProxyModule {
   static REGISTER_USECASES_PROXY = 'RegisterUseCasesProxy'
+  static LOGIN_USECASES_PROXY = 'LoginUseCasesProxy'
+
   static register(): DynamicModule {
     return {
       module: UsecasesProxyModule,
@@ -33,7 +39,8 @@ export class UsecasesProxyModule {
             EnvironmentConfigService,
             DatabaseUserRepository,
             EmailService,
-            HashService
+            HashService,
+            ExceptionsService
           ],
           provide: UsecasesProxyModule.REGISTER_USECASES_PROXY,
           useFactory: (
@@ -41,7 +48,8 @@ export class UsecasesProxyModule {
             enviromentConfig: EnvironmentConfigService,
             userRepository: DatabaseUserRepository,
             emailSender: EmailService,
-            hashService: HashService
+            hashService: HashService,
+            exceptionService: ExceptionsService
           ) =>
             new UseCaseProxy(
               new RegisterUseCases(
@@ -49,12 +57,39 @@ export class UsecasesProxyModule {
                 enviromentConfig,
                 userRepository,
                 emailSender,
+                hashService,
+                exceptionService
+              )
+            )
+        },
+        {
+          inject: [
+            JwtTokenService,
+            EnvironmentConfigService,
+            DatabaseUserRepository,
+            HashService
+          ],
+          provide: UsecasesProxyModule.LOGIN_USECASES_PROXY,
+          useFactory: (
+            jwtTokenService: JwtTokenService,
+            enviromentConfig: EnvironmentConfigService,
+            userRepository: DatabaseUserRepository,
+            hashService: HashService
+          ) =>
+            new UseCaseProxy(
+              new LoginUseCases(
+                jwtTokenService,
+                enviromentConfig,
+                userRepository,
                 hashService
               )
             )
         }
       ],
-      exports: [UsecasesProxyModule.REGISTER_USECASES_PROXY]
+      exports: [
+        UsecasesProxyModule.REGISTER_USECASES_PROXY,
+        UsecasesProxyModule.LOGIN_USECASES_PROXY
+      ]
     }
   }
 }

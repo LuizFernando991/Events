@@ -26,4 +26,30 @@ export class DatabaseUserRepository implements UserRepository {
 
     return newUser
   }
+
+  async updateRefreshToken(id: number, refreshToken: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: {
+        hashRefreshToken: refreshToken
+      }
+    })
+  }
+
+  async getExistsUser(email: string, username: string): Promise<UserM> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            email
+          },
+          { username }
+        ]
+      }
+    })
+    if (!user) {
+      return null
+    }
+    return user
+  }
 }
