@@ -1,14 +1,17 @@
 import { Event } from '../model/event'
 import {
   GetEventOptionsType,
-  GetEventsThetUserParticipatesType,
+  GetEventsThatUserParticipatesResType,
+  GetEventsThatUserParticipatesType,
   RegisterEventType
 } from '../types/event.type'
 
 export interface EventRepository {
   insert(user: RegisterEventType): Promise<Event>
-  get(options: GetEventOptionsType): Promise<Event[]>
+  get(
+    options: GetEventOptionsType
+  ): Promise<GetEventsThatUserParticipatesResType>
   getEventsThatUserParticipates(
-    options: GetEventsThetUserParticipatesType
-  ): Promise<Event[]>
+    options: GetEventsThatUserParticipatesType
+  ): Promise<GetEventsThatUserParticipatesResType>
 }

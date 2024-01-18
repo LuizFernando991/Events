@@ -4,7 +4,8 @@ import { EventRepository } from 'src/domain/repositories/eventRepositoryInterfac
 import { Event } from 'src/domain/model/event'
 import {
   GetEventOptionsType,
-  GetEventsThetUserParticipatesType,
+  GetEventsThatUserParticipatesResType,
+  GetEventsThatUserParticipatesType,
   RegisterEventType
 } from 'src/domain/types/event.type'
 import { Prisma } from '@prisma/client'
@@ -36,7 +37,9 @@ export class DatabaseEventRepository implements EventRepository {
     return newEvent
   }
 
-  async get(options: GetEventOptionsType): Promise<Event[]> {
+  async get(
+    options: GetEventOptionsType
+  ): Promise<GetEventsThatUserParticipatesResType> {
     const limit = 20
     const skip = (options.page - 1) * limit
 
@@ -65,6 +68,10 @@ export class DatabaseEventRepository implements EventRepository {
       }
     }
 
+    const totalEvents = await this.prisma.event.count({ where })
+
+    const totalPages = Math.ceil(totalEvents / limit)
+
     const events = await this.prisma.event.findMany({
       where,
       skip,
@@ -89,12 +96,16 @@ export class DatabaseEventRepository implements EventRepository {
       }
     })
 
-    return events
+    return {
+      events: events,
+      pages: totalPages,
+      currentPage: options.page
+    }
   }
 
   async getEventsThatUserParticipates(
-    options: GetEventsThetUserParticipatesType
-  ) {
+    options: GetEventsThatUserParticipatesType
+  ): Promise<GetEventsThatUserParticipatesResType> {
     const limit = 20
     const skip = (options.page - 1) * limit
 
@@ -122,6 +133,8 @@ export class DatabaseEventRepository implements EventRepository {
         finalDate: { lte: options.finalDate }
       }
     }
+    const totalEvents = await this.prisma.event.count({ where })
+    const totalPages = Math.ceil(totalEvents / limit)
 
     const events = await this.prisma.event.findMany({
       where,
@@ -147,6 +160,6 @@ export class DatabaseEventRepository implements EventRepository {
       }
     })
 
-    return events
+    return { events, currentPage: options.page, pages: totalPages }
   }
 }
