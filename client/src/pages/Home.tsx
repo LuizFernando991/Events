@@ -28,7 +28,7 @@ const Home: FC = () => {
         </div>
       </section>
       <section className="bg-[#f5f8fa] flex justify-center">
-        <div className="flex h-full gap-4 items-center px-2 md:px-20">
+        <div className="flex h-full gap-4 items-center px-2 md:px-20 py-2">
           <div className="flex justify-center flex-col font-bold text-xl text-primary">
             <p>ARTE.</p>
             <p>SHOWS.</p>
