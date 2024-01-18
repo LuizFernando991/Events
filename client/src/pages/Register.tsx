@@ -14,10 +14,12 @@ import { Label } from '@/components/ui/label'
 import useAuth from '@/hooks/useAuth'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import ConfirmCodeForm from '@/components/ConfirmCodeForm'
 
 const Register: FC = () => {
+  const [activationToken, setActivationToken] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const { register: registerUser, user } = useAuth()
+  const { register: registerUser, user, confirmRegister } = useAuth()
 
   const navigator = useNavigate()
 
@@ -40,7 +42,7 @@ const Register: FC = () => {
     }
   })
 
-  const handleOnFormSubmit = (data: {
+  const handleOnFormSubmit = async (data: {
     email: string
     password: string
     username: string
@@ -48,9 +50,10 @@ const Register: FC = () => {
   }) => {
     try {
       setIsLoading(true)
-      registerUser(data)
+      const token = await registerUser(data)
+      setActivationToken(token)
     } catch (err) {
-      console.log(err)
+      //
     } finally {
       setIsLoading(false)
     }
@@ -76,7 +79,7 @@ const Register: FC = () => {
                       message: 'Máximo de 40 caracteres'
                     }
                   })}
-                  id="email"
+                  id="name"
                   placeholder="seu nome"
                   className={errors.name ? 'border-rose-500' : ''}
                 />
@@ -98,7 +101,7 @@ const Register: FC = () => {
                       message: 'Máximo de 40 caracteres'
                     }
                   })}
-                  id="email"
+                  id="username"
                   placeholder="nome de usuário"
                   className={errors.name ? 'border-rose-500' : ''}
                 />
@@ -157,7 +160,7 @@ const Register: FC = () => {
           </CardContent>
           <CardFooter className="flex justify-between flex-col gap-4 md:flex-row-reverse">
             <Button type="submit" size="lg" disabled={isLoading}>
-              Entrar
+              Cadastrar
             </Button>
             <Link to="/login">
               Já tem uma conta? <span className="text-primary">Entrar</span>
@@ -165,6 +168,12 @@ const Register: FC = () => {
           </CardFooter>
         </form>
       </Card>
+      {!!activationToken && (
+        <ConfirmCodeForm
+          activationToken={activationToken}
+          onSubmitForm={confirmRegister}
+        />
+      )}
     </div>
   )
 }

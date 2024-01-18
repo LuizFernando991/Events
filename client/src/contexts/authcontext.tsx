@@ -14,10 +14,16 @@ export type UserRegisterFormType = {
   password: string
 }
 
+export type UserConfirmRegisterType = {
+  activationCode: string
+  activationToken: string
+}
+
 export type AuthProviderType = {
   user: User | null
   login: (data: UserFormType) => Promise<void>
   register: (data: UserRegisterFormType) => Promise<string | null>
+  confirmRegister: (data: UserConfirmRegisterType) => Promise<void>
   logout: () => Promise<void>
   setUser: (user: User | null) => void
 }
@@ -54,7 +60,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     let token: string | null = null
     try {
       const { data }: { data: { activationToken: string } } = await api.post(
-        'register',
+        '/auth/register',
         userRegisterFomr
       )
       token = data.activationToken
@@ -65,6 +71,25 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       }
     }
     return token
+  }
+
+  const confirmRegister = async (
+    confirmRequestData: UserConfirmRegisterType
+  ) => {
+    try {
+      const { data } = await api.post(
+        '/auth/confirmRegister',
+        confirmRequestData
+      )
+      setUserLocalStorage(data.user)
+      setUser(data.user)
+      navigate('/dashbord')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        // toast.error('Código inválido')
+      }
+    }
   }
 
   const logout = async () => {
@@ -79,7 +104,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, setUser, register }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, setUser, register, confirmRegister }}
+    >
       {children}
     </AuthContext.Provider>
   )
