@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { User } from '../types/User'
 import { useApi } from '../hooks/useApi'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useToast } from '@/components/ui/use-toast'
 
 export type UserFormType = {
   email: string
@@ -35,7 +36,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     useLocalStorage()
   const [user, setUser] = useState<User | null>(getUserLocalStorage())
   const navigate = useNavigate()
-
+  const { toast } = useToast()
   const api = useApi({ shouldRefreshToken: false })
 
   const login = async (userForm: UserFormType) => {
@@ -47,10 +48,17 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response?.status === 401) {
-        // toast.error('Email ou senha inválida')
+        toast({
+          variant: 'destructive',
+          title: 'Email ou senha inválidos'
+        })
         return
       }
-      // toast.error('Algo deu errado, tente mais tarde')
+      toast({
+        variant: 'destructive',
+        title: 'Ah não! Algo deu errado, tente mais tarde.'
+      })
+      return
     }
   }
 
@@ -66,9 +74,18 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       token = data.activationToken
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
+      console.log(err)
       if (err.response?.status === 400) {
-        // toast.error('Email ou senha utilizados')
+        toast({
+          variant: 'destructive',
+          title: 'Usuário já cadastrado, tente outro usename ou email'
+        })
+        return null
       }
+      toast({
+        variant: 'destructive',
+        title: 'Ah não! Algo deu errado, tente mais tarde.'
+      })
     }
     return token
   }
@@ -87,7 +104,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response?.status === 400) {
-        // toast.error('Código inválido')
+        toast({
+          variant: 'destructive',
+          title: 'Código não corresponde.'
+        })
       }
     }
   }
