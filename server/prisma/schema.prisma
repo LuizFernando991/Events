@@ -17,22 +17,25 @@ model User {
   updatedAt        DateTime @updatedAt
   hashRefreshToken String?
 
-  events                Event[]
+  evetsAsParticipant    Event[]        @relation("evetsAsParticipant")
+  evetsAsCreator        Event[]        @relation("evetsAsCreator")
   notifications         Notification[]
   invitationsAsReceiver Invitation[]   @relation("asReceiver")
   invitationsAsSender   Invitation[]   @relation("asSender")
 }
 
 model Event {
-  id           Int      @id @default(autoincrement())
-  name         String
-  description  String
-  participants User[]
-  inicialDate  DateTime
-  finalDate    DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  creatorId   Int
+  name        String
+  description String
+  inicialDate DateTime
+  finalDate   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
+  creator       User           @relation(fields: [creatorId], references: [id], name: "evetsAsCreator")
+  participants  User[]         @relation(name: "evetsAsParticipant")
   notifications Notification[]
 }
 
