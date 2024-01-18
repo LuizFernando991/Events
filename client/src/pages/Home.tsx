@@ -1,7 +1,9 @@
 import { FC } from 'react'
 import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 const Home: FC = () => {
+  const navigate = useNavigate()
   return (
     <div id="container" className="w-full grow">
       <section className="h-[40rem] bg-home-first bg-cover bg-center w-full">
@@ -16,7 +18,10 @@ const Home: FC = () => {
               </p>
             </div>
 
-            <Button className="bg-[#e11d48] hover:bg-[#e11d5e] mt-4 max-w-120 w-full">
+            <Button
+              className="bg-[#e11d48] hover:bg-[#e11d5e] mt-4 max-w-120 w-full"
+              onClick={() => navigate('/register')}
+            >
               Cadastre-se
             </Button>
           </div>
