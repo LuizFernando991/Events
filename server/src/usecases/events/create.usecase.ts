@@ -9,6 +9,16 @@ export class CreateEventUseCases {
   ) {}
 
   async execute(eventData: RegisterEventType) {
-    await this.eventRepository.insert(eventData)
+    const currentDate = new Date()
+    if (
+      currentDate > eventData.inicialDate ||
+      currentDate > eventData.finalDate ||
+      eventData.inicialDate > eventData.finalDate
+    )
+      this.exceptionService.badRequestException({
+        code_error: 400,
+        message: 'invalid date'
+      })
+    return await this.eventRepository.insert(eventData)
   }
 }
