@@ -79,4 +79,26 @@ export class EventController {
 
     return { events }
   }
+
+  @Get('/geteventsuserparticipates')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async findAllUserEventsParticipations(
+    @CurrentUser() currentUser,
+    @Query('page') page: string,
+    @Query('search') search: string,
+    @Query('inicialDate') inicialDate: string,
+    @Query('finalDate') finalDate: string
+  ) {
+    const events =
+      await this.GetEventUseCases.getInstance().getEventsThatUserParticipates({
+        userId: currentUser.id,
+        page: page ? +page : 1,
+        search,
+        inicialDate: inicialDate ? new Date(inicialDate) : undefined,
+        finalDate: finalDate ? new Date(finalDate) : undefined
+      })
+
+    return { events }
+  }
 }

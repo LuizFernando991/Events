@@ -1,5 +1,3 @@
-import { UserWithoutPassword } from './user'
-
 export class Event {
   id: number
   name: string
@@ -8,7 +6,7 @@ export class Event {
   finalDate: Date
   createdAt: Date
   updatedAt: Date
-  participants?: UserWithoutPassword[]
+  participants?: { id: number; name: string; username: string }[]
   creator?: {
     name: string
     username: string

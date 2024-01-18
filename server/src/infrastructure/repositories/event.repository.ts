@@ -4,6 +4,7 @@ import { EventRepository } from 'src/domain/repositories/eventRepositoryInterfac
 import { Event } from 'src/domain/model/event'
 import {
   GetEventOptionsType,
+  GetEventsThetUserParticipatesType,
   RegisterEventType
 } from 'src/domain/types/event.type'
 import { Prisma } from '@prisma/client'
@@ -41,6 +42,64 @@ export class DatabaseEventRepository implements EventRepository {
 
     let where: Prisma.EventWhereInput = {
       creatorId: options.creatorId
+    }
+
+    if (options.search) {
+      where = {
+        ...where,
+        name: { contains: options.search, mode: 'insensitive' }
+      }
+    }
+
+    if (options.inicialDate) {
+      where = {
+        ...where,
+        inicialDate: { gte: options.inicialDate }
+      }
+    }
+
+    if (options.finalDate) {
+      where = {
+        ...where,
+        finalDate: { lte: options.finalDate }
+      }
+    }
+
+    const events = await this.prisma.event.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: {
+        inicialDate: 'desc'
+      },
+      select: {
+        id: true,
+        inicialDate: true,
+        finalDate: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        creator: {
+          select: {
+            name: true,
+            username: true
+          }
+        }
+      }
+    })
+
+    return events
+  }
+
+  async getEventsThatUserParticipates(
+    options: GetEventsThetUserParticipatesType
+  ) {
+    const limit = 20
+    const skip = (options.page - 1) * limit
+
+    let where: Prisma.EventWhereInput = {
+      participants: { some: { id: options.userId } }
     }
 
     if (options.search) {
