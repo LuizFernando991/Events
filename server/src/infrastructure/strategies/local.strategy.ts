@@ -6,6 +6,7 @@ import { UseCaseProxy } from '../usecases-proxy/usecase-proxy'
 import { LoginUseCases } from 'src/usecases/auth/login.usecase'
 import { ExceptionsService } from '../exceptions/exception.service'
 import { removeObjectKey } from 'src/helpers/removeKey.helper'
+import { UserWithoutPassword } from 'src/domain/model/user'
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -17,7 +18,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super({ usernameField: 'email' })
   }
 
-  async validate(email: string, password: string) {
+  async validate(
+    email: string,
+    password: string
+  ): Promise<UserWithoutPassword> {
     if (!email || !password) {
       this.exceptionService.UnauthorizedException()
     }
@@ -33,7 +37,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
     let safeUser = removeObjectKey(user, 'password')
     if (safeUser.hashRefreshToken) {
-      safeUser = removeObjectKey(user, 'hashRefreshToken')
+      safeUser = removeObjectKey(safeUser, 'hashRefreshToken')
     }
 
     return safeUser

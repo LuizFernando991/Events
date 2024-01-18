@@ -74,7 +74,8 @@ export class AuthController {
         user.username
       )
     req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie])
-    return user
+
+    return { user }
   }
 
   @Post('logout')
