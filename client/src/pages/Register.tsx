@@ -15,7 +15,7 @@ import useAuth from '@/hooks/useAuth'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-const Login: FC = () => {
+const Register: FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { login, user } = useAuth()
 
@@ -33,7 +33,9 @@ const Login: FC = () => {
     register
   } = useForm({
     defaultValues: {
+      name: '',
       email: '',
+      username: '',
       password: ''
     }
   })
@@ -53,11 +55,43 @@ const Login: FC = () => {
     <div className="flex-grow w-full flex items-center justify-center">
       <Card className="w-full max-w-[500px]">
         <CardHeader>
-          <CardTitle className="font-bold text-primary">Entrar:</CardTitle>
-          <CardDescription>Entre com sua conta Events!</CardDescription>
+          <CardTitle className="font-bold text-primary">Cadastre-se!</CardTitle>
+          <CardDescription>Junte-se ao events!</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(handleOnFormSubmit)}>
           <CardContent className="grid gap-4">
+            <div className="grid w-full items-center">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Nome</Label>
+                <Input
+                  {...register('name', { required: 'Campo obrigatório' })}
+                  id="email"
+                  placeholder="seu nome"
+                  className={errors.name ? 'border-rose-500' : ''}
+                />
+                <p
+                  className={`text-sm text-rose-400 ${errors['name']?.message ? ' ' : 'invisible'}`}
+                >
+                  {errors['name']?.message || 'placeholder error'}
+                </p>
+              </div>
+            </div>
+            <div className="grid w-full items-center">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  {...register('username', { required: 'Campo obrigatório' })}
+                  id="email"
+                  placeholder="nome de usuário"
+                  className={errors.name ? 'border-rose-500' : ''}
+                />
+                <p
+                  className={`text-sm text-rose-400 ${errors['username']?.message ? ' ' : 'invisible'}`}
+                >
+                  {errors['username']?.message || 'placeholder error'}
+                </p>
+              </div>
+            </div>
             <div className="grid w-full items-center">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
@@ -96,7 +130,7 @@ const Login: FC = () => {
             <Button type="submit" size="lg" disabled={isLoading}>
               Entrar
             </Button>
-            <Link to="/register">
+            <Link to="/login">
               Ainda não tem uma conta?{' '}
               <span className="text-primary">Criar</span>
             </Link>
@@ -107,4 +141,4 @@ const Login: FC = () => {
   )
 }
 
-export default Login
+export default Register

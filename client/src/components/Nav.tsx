@@ -8,7 +8,7 @@ import useAuth from '@/hooks/useAuth'
 const Nav = () => {
   const { user, logout } = useAuth() // get user
   return (
-    <nav className="h-[10vh]">
+    <nav className="h-15">
       <div className="flex h-14 items-center justify-between border-b border-zinc-200 px-10">
         <Link to="/" className="flex z-40 font-semibold">
           <span className="text-primary font-bold">Events</span>
