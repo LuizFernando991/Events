@@ -4,7 +4,13 @@ import { ArrowRight, Menu } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
+const MobileNav = ({
+  isAuth,
+  onLogout
+}: {
+  isAuth: boolean
+  onLogout: () => Promise<void>
+}) => {
   const [isOpen, setOpen] = useState<boolean>(false)
 
   const toggleOpen = () => setOpen((prev) => !prev)
@@ -78,12 +84,12 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                 </li>
                 <li className="my-3 h-px w-full bg-gray-300" />
                 <li>
-                  <Link
+                  <button
                     className="flex items-center w-full font-semibold"
-                    to="/logout"
+                    onClick={() => onLogout()}
                   >
                     Sair
-                  </Link>
+                  </button>
                 </li>
               </>
             )}

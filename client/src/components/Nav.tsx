@@ -3,9 +3,10 @@ import { buttonVariants } from './ui/button'
 import { ArrowRight } from 'lucide-react'
 import UserAccountNav from './UserAccountNav'
 import MobileNav from './MobileNav'
+import useAuth from '@/hooks/useAuth'
 
 const Nav = () => {
-  const user = null // get user
+  const { user, logout } = useAuth() // get user
   return (
     <nav className="h-[10vh]">
       <div className="flex h-14 items-center justify-between border-b border-zinc-200 px-10">
@@ -13,7 +14,7 @@ const Nav = () => {
           <span className="text-primary font-bold">Events</span>
         </Link>
 
-        <MobileNav isAuth={!!user} />
+        <MobileNav isAuth={!!user} onLogout={logout} />
 
         <div className="hidden items-center space-x-4 sm:flex">
           {!user ? (
@@ -45,13 +46,14 @@ const Nav = () => {
                   size: 'sm'
                 })}
               >
-                Dashboard
+                Meus eventos
               </Link>
 
               <UserAccountNav
                 name={!user.name ? 'Sua conta' : user.name}
                 email={user.email ?? ''}
-                imageUrl={user.profile ?? ''}
+                imageUrl={''}
+                onLogout={logout}
               />
             </>
           )}

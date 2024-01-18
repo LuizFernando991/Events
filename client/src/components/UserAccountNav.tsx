@@ -14,9 +14,15 @@ interface UserAccountNavProps {
   email: string | undefined
   name: string
   imageUrl: string | null
+  onLogout: () => Promise<void>
 }
 
-const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
+const UserAccountNav = ({
+  email,
+  imageUrl,
+  name,
+  onLogout
+}: UserAccountNavProps) => {
   return (
     <>
       <DropdownMenu>
@@ -66,7 +72,9 @@ const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem className="cursor-pointer">
-            <Link to="/">Sair</Link>
+            <button className="h-full w-full" onClick={() => onLogout()}>
+              Sair
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
