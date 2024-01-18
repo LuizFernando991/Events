@@ -4,7 +4,7 @@ import {
   IJwtServicePayload
 } from '../../domain/adapters/jwt.interface'
 import { IHashService } from 'src/domain/adapters/hash.interface'
-import { UserRepository } from 'src/domain/repositories/userRepositoryIInterface'
+import { UserRepository } from 'src/domain/repositories/userRepositoryInterface'
 import { removeObjectKey } from 'src/helpers/removeKey.helper'
 
 export class LoginUseCases {

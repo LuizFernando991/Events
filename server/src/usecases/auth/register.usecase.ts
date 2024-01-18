@@ -3,7 +3,7 @@ import { IHashService } from 'src/domain/adapters/hash.interface'
 import { IJwtService } from 'src/domain/adapters/jwt.interface'
 import { IEnviromentConfig } from 'src/domain/config/enviroment.interface'
 import { IException } from 'src/domain/exceptions/exceptions.interface'
-import { UserRepository } from 'src/domain/repositories/userRepositoryIInterface'
+import { UserRepository } from 'src/domain/repositories/userRepositoryInterface'
 import { RegisterUserType } from 'src/domain/types/user.types'
 import { removeObjectKey } from 'src/helpers/removeKey.helper'
 
