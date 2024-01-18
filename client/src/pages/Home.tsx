@@ -13,7 +13,7 @@ const Home: FC = () => {
             <p className="mt-5 font-bold text-primary-foreground">
               Simples para quem organiza e fácil para quem participa.
             </p>
-            <Button className="bg-[#e11d48] hover:bg-[#e11d47d3] mt-4">
+            <Button className="bg-[#e11d48] hover:bg-[#e11d5e] mt-4">
               Cadastre-se
             </Button>
           </div>
