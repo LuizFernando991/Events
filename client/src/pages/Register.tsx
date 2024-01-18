@@ -131,8 +131,7 @@ const Register: FC = () => {
               Entrar
             </Button>
             <Link to="/login">
-              Ainda não tem uma conta?{' '}
-              <span className="text-primary">Criar</span>
+              Já tem uma conta? <span className="text-primary">Entrar</span>
             </Link>
           </CardFooter>
         </form>
