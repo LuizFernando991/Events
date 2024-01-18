@@ -16,7 +16,6 @@ import { LoginUseCases } from 'src/usecases/auth/login.usecase'
 import { ConfirmRegisterDto, RegisterUserDto } from './auth.dto'
 import { LoginGuard } from 'src/infrastructure/guards/login.guard'
 import { IRequestWithUser } from 'src/domain/types/request.type'
-import { JwtAuthGuard } from 'src/infrastructure/guards/jwtAuth.guard'
 import { LogoutUseCases } from 'src/usecases/auth/logout.usercase'
 import JwtRefreshGuard from 'src/infrastructure/guards/jwtRefresh.guard'
 
@@ -80,7 +79,6 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtAuthGuard)
   async logout(@Request() request: IRequestWithUser) {
     const cookie = await this.LogoutUsecaseProxy.getInstance().execute()
     request.res.setHeader('Set-Cookie', cookie)
