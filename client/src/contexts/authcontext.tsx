@@ -17,7 +17,7 @@ export type UserRegisterFormType = {
 export type AuthProviderType = {
   user: User | null
   login: (data: UserFormType) => Promise<void>
-  register: (data: UserRegisterFormType) => Promise<void>
+  register: (data: UserRegisterFormType) => Promise<string | null>
   logout: () => Promise<void>
   setUser: (user: User | null) => void
 }
@@ -35,8 +35,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const login = async (userForm: UserFormType) => {
     try {
       const { data } = await api.post('/auth/login', userForm)
-      setUserLocalStorage(data)
-      setUser(data)
+      setUserLocalStorage(data.user)
+      setUser(data.user)
       navigate('/dashbord')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -48,19 +48,23 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
-  const register = async (userRegisterFomr: UserRegisterFormType) => {
+  const register = async (
+    userRegisterFomr: UserRegisterFormType
+  ): Promise<string | null> => {
+    let token: string | null = null
     try {
-      const { data } = await api.post('register', userRegisterFomr)
-      setUser(data)
-      navigate('/dashbord')
+      const { data }: { data: { activationToken: string } } = await api.post(
+        'register',
+        userRegisterFomr
+      )
+      token = data.activationToken
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.log(err)
       if (err.response?.status === 400) {
         // toast.error('Email ou senha utilizados')
-        return
       }
     }
+    return token
   }
 
   const logout = async () => {
