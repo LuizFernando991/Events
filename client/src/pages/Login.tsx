@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,10 +13,19 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import useAuth from '@/hooks/useAuth'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Login: FC = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const { login } = useAuth()
+  const { login, user } = useAuth()
+
+  const navigator = useNavigate()
+
+  useEffect(() => {
+    if (user) {
+      navigator('/dashbord')
+    }
+  }, [navigator, user])
 
   const {
     handleSubmit,
