@@ -5,3 +5,11 @@ export type RegisterEventType = {
   inicialDate: Date
   finalDate: Date
 }
+
+export type GetEventOptionsType = {
+  creatorId?: number
+  page?: number
+  search?: string
+  inicialDate?: Date
+  finalDate?: Date
+}

@@ -9,4 +9,8 @@ export class Event {
   createdAt: Date
   updatedAt: Date
   participants?: UserWithoutPassword[]
+  creator?: {
+    name: string
+    username: string
+  }
 }

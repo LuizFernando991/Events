@@ -18,6 +18,7 @@ import { LogoutUseCases } from 'src/usecases/auth/logout.usercase'
 import { DatabaseEventRepository } from '../repositories/event.repository'
 import { EventRepository } from 'src/domain/repositories/eventRepositoryInterface'
 import { CreateEventUseCases } from 'src/usecases/events/create.usecase'
+import { GetEventUseCases } from 'src/usecases/events/get.usecase'
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ export class UsecasesProxyModule {
   static LOGIN_USECASES_PROXY = 'LoginUseCasesProxy'
   static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy'
   static EVENT_CREATE_PROXY = 'EventCreateUseCasesProxy'
+  static EVENT_GET_PROXY = 'EventGetUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -106,13 +108,25 @@ export class UsecasesProxyModule {
             new UseCaseProxy(
               new CreateEventUseCases(eventRepository, exceptionService)
             )
+        },
+        {
+          inject: [DatabaseEventRepository, ExceptionsService],
+          provide: UsecasesProxyModule.EVENT_GET_PROXY,
+          useFactory: (
+            eventRepository: EventRepository,
+            exceptionService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new GetEventUseCases(eventRepository, exceptionService)
+            )
         }
       ],
       exports: [
         UsecasesProxyModule.REGISTER_USECASES_PROXY,
         UsecasesProxyModule.LOGIN_USECASES_PROXY,
         UsecasesProxyModule.LOGOUT_USECASES_PROXY,
-        UsecasesProxyModule.EVENT_CREATE_PROXY
+        UsecasesProxyModule.EVENT_CREATE_PROXY,
+        UsecasesProxyModule.EVENT_GET_PROXY
       ]
     }
   }
