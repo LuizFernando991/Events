@@ -100,9 +100,8 @@ export class RegisterUseCases {
     const newUser = await this.userRepository.insert(payload.user)
 
     let safeUser = removeObjectKey(newUser, 'password')
-    if (newUser.hashRefreshToken) {
-      safeUser = removeObjectKey(safeUser, 'hashRefreshToken')
-    }
+
+    safeUser = removeObjectKey(safeUser, 'hashRefreshToken')
 
     return { user: safeUser }
   }
