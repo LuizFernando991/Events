@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Register: FC = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const { login, user } = useAuth()
+  const { register: registerUser, user } = useAuth()
 
   const navigator = useNavigate()
 
@@ -40,10 +40,15 @@ const Register: FC = () => {
     }
   })
 
-  const handleOnFormSubmit = (data: { email: string; password: string }) => {
+  const handleOnFormSubmit = (data: {
+    email: string
+    password: string
+    username: string
+    name: string
+  }) => {
     try {
       setIsLoading(true)
-      login(data)
+      registerUser(data)
     } catch (err) {
       console.log(err)
     } finally {
@@ -64,7 +69,13 @@ const Register: FC = () => {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">Nome</Label>
                 <Input
-                  {...register('name', { required: 'Campo obrigatório' })}
+                  {...register('name', {
+                    required: 'Campo obrigatório',
+                    maxLength: {
+                      value: 40,
+                      message: 'Máximo de 40 caracteres'
+                    }
+                  })}
                   id="email"
                   placeholder="seu nome"
                   className={errors.name ? 'border-rose-500' : ''}
@@ -80,7 +91,13 @@ const Register: FC = () => {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="username">Username</Label>
                 <Input
-                  {...register('username', { required: 'Campo obrigatório' })}
+                  {...register('username', {
+                    required: 'Campo obrigatório',
+                    maxLength: {
+                      value: 40,
+                      message: 'Máximo de 40 caracteres'
+                    }
+                  })}
                   id="email"
                   placeholder="nome de usuário"
                   className={errors.name ? 'border-rose-500' : ''}
@@ -96,7 +113,13 @@ const Register: FC = () => {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  {...register('email', { required: 'Campo obrigatório' })}
+                  {...register('email', {
+                    required: 'Campo obrigatório',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: 'Digite um email válido'
+                    }
+                  })}
                   id="email"
                   placeholder="email@email.com"
                   className={errors.email ? 'border-rose-500' : ''}
@@ -112,7 +135,13 @@ const Register: FC = () => {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Senha</Label>
                 <Input
-                  {...register('password', { required: 'Campo obrigatório' })}
+                  {...register('password', {
+                    required: 'Campo obrigatório',
+                    minLength: {
+                      value: 8,
+                      message: 'A senha deve ter no mínimo 8 caracteres'
+                    }
+                  })}
                   type="password"
                   id="password"
                   placeholder="senha"
