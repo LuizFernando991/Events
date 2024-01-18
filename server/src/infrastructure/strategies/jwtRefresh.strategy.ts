@@ -33,8 +33,8 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
 
   async validate(request: Request, payload: IJwtServicePayload) {
     const refreshToken = request.cookies?.Refresh
-    const user =
-      this.LoginUsecaseProxy.getInstance().getUserIfRefreshTokenMatches(
+    const { user } =
+      await this.LoginUsecaseProxy.getInstance().getUserIfRefreshTokenMatches(
         refreshToken,
         payload.id
       )
