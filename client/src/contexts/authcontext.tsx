@@ -44,7 +44,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       const { data } = await api.post('/auth/login', userForm)
       setUserLocalStorage(data.user)
       setUser(data.user)
-      navigate('/dashbord')
+      navigate('/dashboard')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response?.status === 401) {
@@ -100,7 +100,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       )
       setUserLocalStorage(data.user)
       setUser(data.user)
-      navigate('/dashbord')
+      navigate('/dashboard')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response?.status === 400) {
