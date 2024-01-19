@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import ProtectRoutes from './layouts/ProtectRoutes'
 import Dashboard from './pages/Dashboard'
+import CreateEvent from './pages/CreateEvent'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<ProtectRoutes />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/events/create" element={<CreateEvent />} />
             </Route>
           </Route>
         </Routes>

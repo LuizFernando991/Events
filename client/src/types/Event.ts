@@ -11,3 +11,10 @@ export type Event = {
   creator?: Partial<User>
   participants?: Partial<User>[]
 }
+
+export type FormType = {
+  name: string
+  description: string
+  inicialDate: Date | undefined
+  finalDate: Date | undefined
+}
