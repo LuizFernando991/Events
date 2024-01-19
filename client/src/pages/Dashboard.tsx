@@ -1,10 +1,12 @@
-import { useApi } from '@/hooks/useApi'
 import { useEffect, useReducer, useState } from 'react'
+import { useApi } from '@/hooks/useApi'
 import { toast } from '@/components/ui/use-toast'
 import { Event } from '@/types/Event'
 import LoadingScreen from '@/components/LoadingScreen'
 import EventCard from '@/components/EventCard'
 import Pagination from '@/components/Pagination'
+import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 type Action =
   | { type: 'LOAD_EVENTS'; payload: { events: Event[]; totalPages: number } }
@@ -51,7 +53,7 @@ const Dashboard = () => {
   const [deletingEventId, setDeletingEventId] = useState<number | null>(null)
   const [eventsContext, eventsDispatch] = useReducer(reducer, initialState)
   const api = useApi({ shouldRefreshToken: true })
-
+  const navigate = useNavigate()
   useEffect(() => {
     const controller = new AbortController()
     const signal = controller.signal
@@ -116,9 +118,15 @@ const Dashboard = () => {
       ) : (
         <main className="grow mx-auto max-w-7xl md:p-10">
           <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
-            <h1 className="mb-3 font-bold text-5xl text-primary">
+            <h1 className="mb-3 font-bold text-5xl text-primary mr-3">
               Meus eventos
             </h1>
+            <Button
+              onClick={() => navigate('/events/create')}
+              variant="default"
+            >
+              Criar Novo Evento!
+            </Button>
           </div>
           {/* display all user events */}
           {eventsContext.events.length !== 0 && (
