@@ -8,7 +8,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'prettier'
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', '**/components/ui/*.tsx'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', '**/components/ui/*.tsx', '**/components/ui/*.ts'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
