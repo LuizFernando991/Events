@@ -4,7 +4,7 @@ import { EventRepository } from 'src/domain/repositories/eventRepositoryInterfac
 import { Event } from 'src/domain/model/event'
 import {
   GetEventOptionsType,
-  GetEventsThatUserParticipatesResType,
+  GetEventsResType,
   GetEventsThatUserParticipatesType,
   RegisterEventType
 } from 'src/domain/types/event.type'
@@ -65,9 +65,7 @@ export class DatabaseEventRepository implements EventRepository {
     return event
   }
 
-  async get(
-    options: GetEventOptionsType
-  ): Promise<GetEventsThatUserParticipatesResType> {
+  async get(options: GetEventOptionsType): Promise<GetEventsResType> {
     const limit = 20
     const skip = (options.page - 1) * limit
 
@@ -134,7 +132,7 @@ export class DatabaseEventRepository implements EventRepository {
 
   async getEventsThatUserParticipates(
     options: GetEventsThatUserParticipatesType
-  ): Promise<GetEventsThatUserParticipatesResType> {
+  ): Promise<GetEventsResType> {
     const limit = 20
     const skip = (options.page - 1) * limit
 

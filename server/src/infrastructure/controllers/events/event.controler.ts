@@ -107,6 +107,15 @@ export class EventController {
     return events
   }
 
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async getEvemt(@Param('id') id: string) {
+    const events = await this.GetEventUseCases.getInstance().getEvent(+id)
+
+    return events
+  }
+
   @Delete('/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)

@@ -24,7 +24,7 @@ export type GetEventsThatUserParticipatesType = {
   finalDate?: Date
 }
 
-export type GetEventsThatUserParticipatesResType = {
+export type GetEventsResType = {
   events: Event[]
   pages: number
   currentPage: number
