@@ -56,7 +56,7 @@ export class EventController {
       finalDate: finalDate ? new Date(finalDate) : undefined
     })
 
-    return { events }
+    return events
   }
 
   @Get('/userevents')
@@ -77,7 +77,7 @@ export class EventController {
       finalDate: finalDate ? new Date(finalDate) : undefined
     })
 
-    return { events }
+    return events
   }
 
   @Get('/geteventsuserparticipates')
@@ -99,6 +99,6 @@ export class EventController {
         finalDate: finalDate ? new Date(finalDate) : undefined
       })
 
-    return { events }
+    return events
   }
 }
