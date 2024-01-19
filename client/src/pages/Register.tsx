@@ -25,7 +25,7 @@ const Register: FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigator('/dashbord')
+      navigator('/dashboard')
     }
   }, [navigator, user])
 
