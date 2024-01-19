@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import getSepareteDate from '@/helpers/getSepareteDate'
 import { Button } from './ui/button'
 import { Loader2, Trash, Edit } from 'lucide-react'
+import useAuth from '@/hooks/useAuth'
 
 type EventCardPropsType = {
   event: Event
@@ -12,6 +13,7 @@ type EventCardPropsType = {
 
 const EventCard: FC<EventCardPropsType> = ({ event, isLoading }) => {
   const { year, month, day } = getSepareteDate(event.inicialDate)
+  const { user } = useAuth()
   const navigate = useNavigate()
   return (
     <li
@@ -48,30 +50,33 @@ const EventCard: FC<EventCardPropsType> = ({ event, isLoading }) => {
             <div>{year}</div>
           </div>
         </div>
+        {event.creator?.username === user?.username && (
+          <>
+            <Button
+              onClick={() => {
+                navigate(`/event/edit/${event.id}`)
+              }}
+              size="icon"
+              className="w-full"
+              variant="ghost"
+            >
+              <Edit />
+            </Button>
 
-        <Button
-          onClick={() => {
-            navigate(`/event/edit/${event.id}`)
-          }}
-          size="icon"
-          className="w-full"
-          variant="ghost"
-        >
-          <Edit />
-        </Button>
-
-        <Button
-          onClick={() => {}}
-          size="sm"
-          className="w-full"
-          variant="destructive"
-        >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Trash className="h-4 w-4" />
-          )}
-        </Button>
+            <Button
+              onClick={() => {}}
+              size="sm"
+              className="w-full"
+              variant="destructive"
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash className="h-4 w-4" />
+              )}
+            </Button>
+          </>
+        )}
       </div>
     </li>
   )
