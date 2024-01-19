@@ -16,7 +16,10 @@ export class DatabaseEventRepository implements EventRepository {
 
   async insert(eventData: RegisterEventType): Promise<Event> {
     const newEvent = await this.prisma.event.create({
-      data: eventData,
+      data: {
+        ...eventData,
+        participants: { connect: [{ id: eventData.creatorId }] }
+      },
       select: {
         id: true,
         inicialDate: true,
