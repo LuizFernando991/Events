@@ -23,7 +23,7 @@ export function useApi({
         const originalRequest = error.config
 
         // Verifica se o erro é devido a um token expirado
-        if (error.response.status === 401) {
+        if (error?.response?.status && error.response.status === 401) {
           // Evita a execução simultânea de várias solicitações de atualização do token
           if (!isRefreshing) {
             isRefreshing = true
