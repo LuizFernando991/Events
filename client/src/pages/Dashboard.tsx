@@ -48,6 +48,7 @@ const initialState: EventContextType = {
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [deletingEventId, setDeletingEventId] = useState<number | null>(null)
   const [eventsContext, eventsDispatch] = useReducer(reducer, initialState)
   const api = useApi({ shouldRefreshToken: true })
 
@@ -89,6 +90,25 @@ const Dashboard = () => {
     eventsDispatch({ type: 'CHANGE_PAGE', payload: pageNumber })
   }
 
+  const onDeleteEvent = async (id: number) => {
+    try {
+      setDeletingEventId(id)
+      await api.delete(`/event/${id}`)
+      eventsDispatch({ type: 'REMOVE_EVENT', payload: id })
+      toast({
+        variant: 'default',
+        title: 'Evento excluído!'
+      })
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'Ah não! Algo deu errado, tente mais tarde.'
+      })
+    } finally {
+      setDeletingEventId(null)
+    }
+  }
+
   return (
     <>
       {isLoading ? (
@@ -104,7 +124,12 @@ const Dashboard = () => {
           {eventsContext.events.length !== 0 && (
             <ul className="mt-8 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3">
               {eventsContext.events.map((event) => (
-                <EventCard event={event} key={event.id} isLoading={false} />
+                <EventCard
+                  event={event}
+                  key={event.id}
+                  isLoading={event.id === deletingEventId}
+                  onDelete={onDeleteEvent}
+                />
               ))}
             </ul>
           )}

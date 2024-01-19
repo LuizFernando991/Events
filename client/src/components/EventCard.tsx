@@ -9,9 +9,10 @@ import useAuth from '@/hooks/useAuth'
 type EventCardPropsType = {
   event: Event
   isLoading: boolean
+  onDelete: (id: number) => void
 }
 
-const EventCard: FC<EventCardPropsType> = ({ event, isLoading }) => {
+const EventCard: FC<EventCardPropsType> = ({ event, isLoading, onDelete }) => {
   const { year, month, day } = getSepareteDate(event.inicialDate)
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -64,7 +65,7 @@ const EventCard: FC<EventCardPropsType> = ({ event, isLoading }) => {
             </Button>
 
             <Button
-              onClick={() => {}}
+              onClick={isLoading ? () => {} : () => onDelete(event.id)}
               size="sm"
               className="w-full"
               variant="destructive"
