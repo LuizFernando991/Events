@@ -10,8 +10,10 @@ export class CreateEventDto {
   description: string
 
   @IsNotEmpty()
-  inicialDate: Date
+  @IsString()
+  inicialDate: string
 
   @IsNotEmpty()
-  finalDate: Date
+  @IsString()
+  finalDate: string
 }

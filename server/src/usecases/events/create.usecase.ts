@@ -9,10 +9,11 @@ export class CreateEventUseCases {
   ) {}
 
   async execute(eventData: RegisterEventType) {
-    const currentDate = new Date()
+    const currentDate = new Date().setHours(0, 0, 0, 0)
+    const compareDate = new Date(currentDate)
     if (
-      currentDate > eventData.inicialDate ||
-      currentDate > eventData.finalDate ||
+      compareDate > eventData.inicialDate ||
+      compareDate > eventData.finalDate ||
       eventData.inicialDate > eventData.finalDate
     )
       this.exceptionService.badRequestException({
