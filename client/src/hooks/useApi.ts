@@ -29,11 +29,8 @@ export function useApi({
           if (!isRefreshing) {
             isRefreshing = true
             try {
-              console.log('refresh_token')
               // Chamada para renovar o token
               const refreshResponse = await api.post('/auth/refresh')
-              console.log(refreshResponse)
-
               // Reenvie a solicitação original com o novo token do backend
               originalRequest.headers['Authorization'] =
                 `Bearer ${refreshResponse.data.token}`
