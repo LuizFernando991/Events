@@ -14,14 +14,9 @@ const getSepareteDate = (date: string | Date) => {
     'DEZ'
   ]
   const dateObj = new Date(date)
-  const month = m[dateObj.getUTCMonth()]
-  const day = dateObj.getDay()
-  const year = dateObj.getFullYear()
-  return {
-    month,
-    day,
-    year
-  }
+  const month = m[dateObj.getMonth()]
+
+  return month
 }
 
 export default getSepareteDate

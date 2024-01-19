@@ -3,6 +3,7 @@ import { Event } from '@/types/Event'
 import { Link, useNavigate } from 'react-router-dom'
 import getSepareteDate from '@/helpers/getSepareteDate'
 import { Button } from './ui/button'
+import { getDate, getYear } from 'date-fns'
 import { Loader2, Trash, Edit } from 'lucide-react'
 import useAuth from '@/hooks/useAuth'
 
@@ -13,7 +14,7 @@ type EventCardPropsType = {
 }
 
 const EventCard: FC<EventCardPropsType> = ({ event, isLoading, onDelete }) => {
-  const { year, month, day } = getSepareteDate(event.inicialDate)
+  const mouth = getSepareteDate(event.inicialDate)
   const { user } = useAuth()
   const navigate = useNavigate()
   return (
@@ -44,11 +45,11 @@ const EventCard: FC<EventCardPropsType> = ({ event, isLoading, onDelete }) => {
 
       <div className="px-6 mt-4 grid grid-cols-3 place-items-center py-2 gap-6 text-primary font-bold">
         <div className="flex items-center gap-2">
-          <div className="text-xl">{month}</div>
+          <div className="text-xl">{mouth}</div>
           <span className="h-[20px] w-[1px] bg-zinc-500" />
           <div className="flex flex-col justify-center items-center text-xs">
-            <div>{day}</div>
-            <div>{year}</div>
+            <div>{getDate(event.inicialDate)}</div>
+            <div>{getYear(event.inicialDate)}</div>
           </div>
         </div>
         {event.creator?.username === user?.username && (
