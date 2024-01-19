@@ -7,7 +7,9 @@ import {
   UseGuards,
   Post,
   Get,
-  Query
+  Query,
+  Delete,
+  Param
 } from '@nestjs/common'
 import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecase-proxy'
 import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecase-proxy.module'
@@ -16,6 +18,7 @@ import { CreateEventDto } from './event.dto'
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwtAuth.guard'
 import { CurrentUser } from 'src/infrastructure/decorators/currentuser.decorator'
 import { GetEventUseCases } from 'src/usecases/events/get.usecase'
+import { DeleteEventUseCases } from 'src/usecases/events/delete.usecase'
 
 @Controller('event')
 export class EventController {
@@ -23,7 +26,9 @@ export class EventController {
     @Inject(UsecasesProxyModule.EVENT_CREATE_PROXY)
     private readonly CreateEventUseCases: UseCaseProxy<CreateEventUseCases>,
     @Inject(UsecasesProxyModule.EVENT_GET_PROXY)
-    private readonly GetEventUseCases: UseCaseProxy<GetEventUseCases>
+    private readonly GetEventUseCases: UseCaseProxy<GetEventUseCases>,
+    @Inject(UsecasesProxyModule.EVENT_DELETE_PROXY)
+    private readonly DeleteEventUseCases: UseCaseProxy<DeleteEventUseCases>
   ) {}
 
   @Post('/')
@@ -100,5 +105,13 @@ export class EventController {
       })
 
     return events
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async delete(@CurrentUser() currentUser, @Param('id') id: string) {
+    await this.DeleteEventUseCases.getInstance().execulte(currentUser.id, +id)
+    return
   }
 }

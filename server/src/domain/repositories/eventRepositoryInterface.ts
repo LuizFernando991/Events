@@ -8,6 +8,8 @@ import {
 
 export interface EventRepository {
   insert(user: RegisterEventType): Promise<Event>
+  getEvent(id: number): Promise<Event>
+  delete(id: number): Promise<void>
   get(
     options: GetEventOptionsType
   ): Promise<GetEventsThatUserParticipatesResType>

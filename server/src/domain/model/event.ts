@@ -7,7 +7,8 @@ export class Event {
   createdAt: Date
   updatedAt: Date
   participants?: { id: number; name: string; username: string }[]
-  creator?: {
+  creator: {
+    id: number
     name: string
     username: string
   }

@@ -30,6 +30,7 @@ export class DatabaseEventRepository implements EventRepository {
         updatedAt: true,
         creator: {
           select: {
+            id: true,
             name: true,
             username: true
           }
@@ -38,6 +39,30 @@ export class DatabaseEventRepository implements EventRepository {
     })
 
     return newEvent
+  }
+
+  async getEvent(id: number): Promise<Event> {
+    const event = await this.prisma.event.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        inicialDate: true,
+        finalDate: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            username: true
+          }
+        }
+      }
+    })
+
+    return event
   }
 
   async get(
@@ -92,6 +117,7 @@ export class DatabaseEventRepository implements EventRepository {
         updatedAt: true,
         creator: {
           select: {
+            id: true,
             name: true,
             username: true
           }
@@ -156,6 +182,7 @@ export class DatabaseEventRepository implements EventRepository {
         updatedAt: true,
         creator: {
           select: {
+            id: true,
             name: true,
             username: true
           }
@@ -164,5 +191,13 @@ export class DatabaseEventRepository implements EventRepository {
     })
 
     return { events, currentPage: options.page, pages: totalPages }
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.prisma.event.delete({
+      where: {
+        id
+      }
+    })
   }
 }
