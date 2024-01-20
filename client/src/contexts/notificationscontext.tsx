@@ -9,6 +9,7 @@ import useSocket from '../hooks/useSocket'
 import { toast } from '@/components/ui/use-toast'
 import { Notification } from '@/types/Notification'
 import { useApi } from '@/hooks/useApi'
+import useAuth from '@/hooks/useAuth'
 
 export type NotificationsProviderType = {
   notifications: Notification[]
@@ -22,12 +23,13 @@ export const NotificationsContext = createContext(
 
 export const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
   const socket = useSocket()
+  const { user } = useAuth()
   const api = useApi({ shouldRefreshToken: true })
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [haveNewNotifications, setHavanewNotifications] = useState(false)
 
   useEffect(() => {
-    if (socket) {
+    if (socket && user) {
       socket.on('notification', (data: Notification) => {
         setNotifications((e) => [data, ...e])
         setHavanewNotifications(true)
@@ -37,9 +39,10 @@ export const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
         })
       })
     }
-  }, [socket])
+  }, [socket, user])
 
   useEffect(() => {
+    if (!user) return
     const fetchNotifications = async () => {
       try {
         const { data } = await api.get('/notification')
@@ -52,10 +55,10 @@ export const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
       }
     }
     fetchNotifications()
-  }, [api])
+  }, [api, user])
 
   const clearNotification = () => {
-    if (notifications.length === 0 || !haveNewNotifications) return
+    if (notifications.length === 0 || !haveNewNotifications || !user) return
     setHavanewNotifications(false)
     api.put('/notification/viewed')
   }

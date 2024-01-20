@@ -12,9 +12,6 @@ export const SocketProvider: FC<PropsWithChildren> = ({ children }) => {
     withCredentials: true
   })
   useEffect(() => {
-    //loadnotifications
-  }, [])
-  useEffect(() => {
     socket.on
     return () => {
       socket.disconnect()
