@@ -187,12 +187,7 @@ const EventPage = () => {
           >
             Veja quem já está participando:
           </Label>
-          <Button
-            onClick={showParticipants}
-            size="icon"
-            className="w-full"
-            variant="ghost"
-          >
+          <Button onClick={showParticipants} size="icon" variant="ghost">
             <Eye />
           </Button>
         </div>
