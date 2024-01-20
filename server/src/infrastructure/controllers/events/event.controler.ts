@@ -9,16 +9,19 @@ import {
   Get,
   Query,
   Delete,
-  Param
+  Param,
+  Put
 } from '@nestjs/common'
 import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecase-proxy'
 import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecase-proxy.module'
 import { CreateEventUseCases } from 'src/usecases/events/create.usecase'
-import { CreateEventDto } from './event.dto'
+import { CreateEventDto, UpdateEventDto } from './event.dto'
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwtAuth.guard'
 import { CurrentUser } from 'src/infrastructure/decorators/currentuser.decorator'
 import { GetEventUseCases } from 'src/usecases/events/get.usecase'
 import { DeleteEventUseCases } from 'src/usecases/events/delete.usecase'
+import { UpdateEventUseCases } from 'src/usecases/events/update.usecase'
+import { IJwtServicePayload } from 'src/domain/adapters/jwt.interface'
 
 @Controller('event')
 export class EventController {
@@ -28,13 +31,18 @@ export class EventController {
     @Inject(UsecasesProxyModule.EVENT_GET_PROXY)
     private readonly GetEventUseCases: UseCaseProxy<GetEventUseCases>,
     @Inject(UsecasesProxyModule.EVENT_DELETE_PROXY)
-    private readonly DeleteEventUseCases: UseCaseProxy<DeleteEventUseCases>
+    private readonly DeleteEventUseCases: UseCaseProxy<DeleteEventUseCases>,
+    @Inject(UsecasesProxyModule.EVENT_UPDATE_PROXY)
+    private readonly UpdateEventUseCases: UseCaseProxy<UpdateEventUseCases>
   ) {}
 
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(JwtAuthGuard)
-  async create(@Body() data: CreateEventDto, @CurrentUser() currentUser) {
+  async create(
+    @Body() data: CreateEventDto,
+    @CurrentUser() currentUser: IJwtServicePayload
+  ) {
     const event = await this.CreateEventUseCases.getInstance().execute({
       ...data,
       inicialDate: data.inicialDate,
@@ -43,6 +51,23 @@ export class EventController {
     })
 
     return { event }
+  }
+
+  @Put('/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async update(
+    @Body() data: UpdateEventDto,
+    @CurrentUser() currentUser: IJwtServicePayload,
+    @Param('id') id: string
+  ) {
+    const newEvent = await this.UpdateEventUseCases.getInstance().execute(
+      currentUser.id,
+      id ? +id : undefined,
+      data
+    )
+
+    return newEvent
   }
 
   @Get('/')
@@ -68,7 +93,7 @@ export class EventController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   async findAllUserEvents(
-    @CurrentUser() currentUser,
+    @CurrentUser() currentUser: IJwtServicePayload,
     @Query('page') page: string,
     @Query('search') search: string,
     @Query('inicialDate') inicialDate: string,
@@ -89,7 +114,7 @@ export class EventController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   async findAllUserEventsParticipations(
-    @CurrentUser() currentUser,
+    @CurrentUser() currentUser: IJwtServicePayload,
     @Query('page') page: string,
     @Query('search') search: string,
     @Query('inicialDate') inicialDate: string,
@@ -119,7 +144,10 @@ export class EventController {
   @Delete('/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  async delete(@CurrentUser() currentUser, @Param('id') id: string) {
+  async delete(
+    @CurrentUser() currentUser: IJwtServicePayload,
+    @Param('id') id: string
+  ) {
     await this.DeleteEventUseCases.getInstance().execulte(currentUser.id, +id)
     return
   }

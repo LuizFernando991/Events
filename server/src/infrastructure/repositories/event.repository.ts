@@ -6,7 +6,8 @@ import {
   GetEventOptionsType,
   GetEventsResType,
   GetEventsThatUserParticipatesType,
-  RegisterEventType
+  RegisterEventType,
+  UpdateEventType
 } from 'src/domain/types/event.type'
 import { Prisma } from '@prisma/client'
 
@@ -186,6 +187,41 @@ export class DatabaseEventRepository implements EventRepository {
     })
 
     return { events, currentPage: options.page, pages: totalPages }
+  }
+
+  async update(id: number, data: UpdateEventType): Promise<Event> {
+    const newEvent = await this.prisma.event.update({
+      where: {
+        id
+      },
+      data: {
+        ...data,
+        finalDate: data.finalDate
+          ? new Date(new Date(data.finalDate).setHours(0, 0, 0, 0))
+          : undefined,
+        inicialDate: data.inicialDate
+          ? new Date(new Date(data.inicialDate).setHours(0, 0, 0, 0))
+          : undefined
+      },
+      select: {
+        id: true,
+        inicialDate: true,
+        finalDate: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            username: true
+          }
+        }
+      }
+    })
+
+    return newEvent
   }
 
   async delete(id: number): Promise<void> {

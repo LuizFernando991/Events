@@ -19,4 +19,4 @@ export class CreateEventDto {
   finalDate: string
 }
 
-export class EditEventDto extends PartialType(CreateEventDto) {}
+export class UpdateEventDto extends PartialType(CreateEventDto) {}

@@ -29,3 +29,5 @@ export type GetEventsResType = {
   pages: number
   currentPage: number
 }
+
+export type UpdateEventType = Partial<RegisterEventType>
