@@ -21,6 +21,7 @@ type EventFormPropsType = {
     defautInicialDate: Date
     defaultFinalDate: Date
   }
+  submitButtonTitle?: string
 }
 
 const EventForm: FC<EventFormPropsType> = ({
@@ -29,7 +30,8 @@ const EventForm: FC<EventFormPropsType> = ({
   errors,
   setValue,
   isLoading,
-  defaultDate
+  defaultDate,
+  submitButtonTitle = 'Criar'
 }) => {
   const [date, setDate] = useState<DateRange | undefined>(undefined)
 
@@ -142,7 +144,7 @@ const EventForm: FC<EventFormPropsType> = ({
           disabled={isLoading}
           className="max-w-[300px] w-full"
         >
-          Criar
+          {submitButtonTitle}
         </Button>
       </div>
     </form>

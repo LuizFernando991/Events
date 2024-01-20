@@ -125,6 +125,7 @@ const EditEvent: FC = () => {
         setValue={setValue}
         defaultDate={defaultDate}
         isLoading={isLoading}
+        submitButtonTitle="Salvar"
       />
       <AlertEventDate
         isOpen={!!participatEvent}
