@@ -30,7 +30,11 @@ const EventParticipations: FC<EventParticipationsPropsType> = ({
           </DialogTitle>
         </DialogHeader>
         <div className="grow over overflow-y-auto">
-          {isLoading && <Loader2 className="h-20 w-20 animate-spin" />}
+          {isLoading && (
+            <div className="flex justify-center items-center">
+              <Loader2 className="h-20 w-20 animate-spin text-zinc-500" />
+            </div>
+          )}
           <div>
             {participations?.map((user) => (
               <div className="flex gap-5 p-2">
