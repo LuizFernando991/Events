@@ -96,12 +96,12 @@ const EventPage = () => {
 
   return (
     <div className="grow w-full mx-auto max-w-7xl md:p-10">
-      <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
+      <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0 px-2 md:px-0">
         <h1 className="mb-3 font-bold text-5xl text-primary mr-3">
           {event.name}
         </h1>
         {event.creator?.id ? (
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center ml-auto">
             <Button
               onClick={() => {
                 navigate(`/event/edit/${event.id}`)

@@ -117,7 +117,7 @@ const Dashboard = () => {
         <LoadingScreen />
       ) : (
         <main className="grow mx-auto max-w-7xl md:p-10 w-full">
-          <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
+          <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0 px-2 md:px-0">
             <h1 className="mb-3 font-bold text-5xl text-primary m-2">
               Meus eventos
             </h1>
