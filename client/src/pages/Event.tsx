@@ -22,6 +22,7 @@ const EventPage = () => {
   const api = useApi({ shouldRefreshToken: true })
   const navigate = useNavigate()
   useEffect(() => {
+    if (!id) return navigate('/dashboard')
     const fetchEvent = async () => {
       setIsLoding(true)
       try {
@@ -30,14 +31,14 @@ const EventPage = () => {
       } catch (err) {
         toast({
           variant: 'destructive',
-          title: 'A data de início não pode ser anterior a hoje!'
+          title: 'Algo deu errado, tente mais tarde!'
         })
       } finally {
         setIsLoding(false)
       }
     }
     fetchEvent()
-  }, [api, id])
+  }, [api, id, navigate])
 
   const toggleParticipation = async () => {
     try {
