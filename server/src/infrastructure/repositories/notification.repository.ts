@@ -41,7 +41,17 @@ export class DatabaseNotificationRepository implements NotificationRepository {
   async getUserNotifications(userId: number): Promise<Notification[]> {
     return this.prisma.notification.findMany({
       where: {
-        toUserId: userId
+        AND: [
+          {
+            toUserId: userId
+          },
+          {
+            viewed: false
+          }
+        ]
+      },
+      orderBy: {
+        createdAt: 'desc'
       },
       select: {
         id: true,
@@ -66,5 +76,18 @@ export class DatabaseNotificationRepository implements NotificationRepository {
         }
       }
     })
+  }
+
+  async setView(userId: number): Promise<void> {
+    try {
+      await this.prisma.notification.deleteMany({
+        where: {
+          toUserId: userId
+        }
+      })
+    } catch (err) {
+      return
+    }
+    return
   }
 }

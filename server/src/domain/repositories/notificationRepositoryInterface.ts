@@ -4,4 +4,5 @@ import { RegisterNotificationType } from '../types/notification.types'
 export interface NotificationRepository {
   getUserNotifications(userId: number): Promise<Notification[]>
   create(data: RegisterNotificationType): Promise<Notification>
+  setView(userId: number): Promise<void>
 }

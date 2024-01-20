@@ -27,6 +27,8 @@ import { NotificationRepository } from 'src/domain/repositories/notificationRepo
 import { SocketGateway } from '../socket/socket.gateway'
 import { DatabaseNotificationRepository } from '../repositories/notification.repository'
 import { SocketModule } from '../socket/socket.module.'
+import { GetNotificationUseCases } from 'src/usecases/notification/get.usecases'
+import { UpdateNotificationUseCases } from 'src/usecases/notification/update.usecases'
 
 @Module({
   imports: [
@@ -50,6 +52,8 @@ export class UsecasesProxyModule {
   static EVENT_PARTICIPATE_PROXY = 'EventParticipateUseCasesProxy'
   static NOTIFICATION_CREATE_PROXY = 'NotificationCreateUseCasesProxy'
   static SOCKET_EMIT_PROXY = 'SocketEmitUseCasesProxy'
+  static NOTIFICATION_GET_PROXY = 'NotificationGetUseCasesProxy'
+  static NOTIFICATION_UPDATE_PROXY = 'NotificationUpdateUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -186,6 +190,34 @@ export class UsecasesProxyModule {
                 socketService
               )
             )
+        },
+        {
+          inject: [DatabaseNotificationRepository, ExceptionsService],
+          provide: UsecasesProxyModule.NOTIFICATION_GET_PROXY,
+          useFactory: (
+            notificationRepository: NotificationRepository,
+            exceptionService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new GetNotificationUseCases(
+                notificationRepository,
+                exceptionService
+              )
+            )
+        },
+        {
+          inject: [DatabaseNotificationRepository, ExceptionsService],
+          provide: UsecasesProxyModule.NOTIFICATION_UPDATE_PROXY,
+          useFactory: (
+            notificationRepository: NotificationRepository,
+            exceptionService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new UpdateNotificationUseCases(
+                notificationRepository,
+                exceptionService
+              )
+            )
         }
       ],
       exports: [
@@ -197,7 +229,9 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.EVENT_DELETE_PROXY,
         UsecasesProxyModule.EVENT_UPDATE_PROXY,
         UsecasesProxyModule.EVENT_PARTICIPATE_PROXY,
-        UsecasesProxyModule.NOTIFICATION_CREATE_PROXY
+        UsecasesProxyModule.NOTIFICATION_CREATE_PROXY,
+        UsecasesProxyModule.NOTIFICATION_GET_PROXY,
+        UsecasesProxyModule.NOTIFICATION_UPDATE_PROXY
       ]
     }
   }

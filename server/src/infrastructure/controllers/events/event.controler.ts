@@ -76,7 +76,8 @@ export class EventController {
       participants: newEvent.participants,
       title: `O evento: ${newEvent.name}. Foi alterado`,
       description: 'O evento que você estava participando foi alterado',
-      type: 'updated'
+      type: 'updated',
+      aboutEventId: newEvent.id
     })
 
     return newEvent

@@ -52,6 +52,7 @@ model Notification {
   type         NotificationType
   toUserId     Int
   aboutEventId Int?
+  createdAt    DateTime         @default(now())
 
   aboutEvent Event? @relation(fields: [aboutEventId], references: [id], onDelete: Cascade)
   toUser     User   @relation(fields: [toUserId], references: [id], onDelete: Cascade)
