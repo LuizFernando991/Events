@@ -1,19 +1,24 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import EventForm from '@/components/EventForm'
-import { FormType } from '@/types/Event'
+import { Event, FormType } from '@/types/Event'
 import { useApi } from '@/hooks/useApi'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '@/components/ui/use-toast'
 import AlertEventDate from '@/components/AlertEventDate'
-import { Event } from '@/types/Event'
 
-const CreateEvent: FC = () => {
+const EditEvent: FC = () => {
   const currentDate = new Date()
-  const [participatEvent, setParticipatEvent] = useState<Event | null>(null)
+  const [title, setTitle] = useState('')
+  const [defaultDate, setDefaultDate] = useState({
+    defautInicialDate: currentDate,
+    defaultFinalDate: currentDate
+  })
   const [isLoading, setIsLoading] = useState(false)
+  const [participatEvent, setParticipatEvent] = useState<Event | null>(null)
   const api = useApi({ shouldRefreshToken: true })
   const navigate = useNavigate()
+  const { id } = useParams()
   const {
     handleSubmit,
     formState: { errors },
@@ -24,10 +29,28 @@ const CreateEvent: FC = () => {
     defaultValues: {
       name: '',
       description: '',
-      inicialDate: currentDate,
-      finalDate: currentDate
+      inicialDate: undefined,
+      finalDate: undefined
     }
   })
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      const res = await api.get(`/event/${id}`)
+      const inicialDate = new Date(res.data.inicialDate)
+      const finalDate = new Date(res.data.finalDate)
+      setValue('name', res.data.name)
+      setValue('description', res.data.description)
+      setValue('inicialDate', inicialDate)
+      setValue('finalDate', finalDate)
+      setTitle(res.data.name)
+      setDefaultDate({
+        defautInicialDate: inicialDate,
+        defaultFinalDate: finalDate
+      })
+    }
+    fetchEvent()
+  }, [api, id, setValue])
 
   const onCheck = async (data: FormType) => {
     setIsLoading(true)
@@ -47,21 +70,19 @@ const CreateEvent: FC = () => {
       setIsLoading(false)
       return
     }
-
     try {
       const res = await api.get('/event/geteventsuserparticipates', {
         params: {
           inicialDate: data.inicialDate.toDateString(),
-          finalDate: data.finalDate
-            ? data.finalDate.toDateString()
-            : data.inicialDate.toDateString()
+          finalDate: data.finalDate ? data.finalDate : data.inicialDate
         }
       })
-      if (res.data.events.length) {
+      if (res.data.events.length && id && res.data.events[0].id !== +id) {
         setIsLoading(false)
         setParticipatEvent(res.data.events[0])
         return
       }
+
       onSubmit(data)
     } catch (err) {
       setIsLoading(false)
@@ -69,22 +90,23 @@ const CreateEvent: FC = () => {
   }
 
   const onSubmit = async (data: FormType) => {
+    setIsLoading(true)
     try {
-      setIsLoading(true)
-      await api.post('/event', {
+      await api.put(`/event/${id}`, {
         ...data,
         inicialDate: data.inicialDate!.toDateString(),
         finalDate: data.finalDate
           ? data.finalDate.toDateString()
           : data.inicialDate!.toDateString()
       })
-      navigate('/dashboard')
+      navigate(`/event/${id}`)
     } catch (err) {
       toast({
         variant: 'destructive',
         title: 'A data de início não pode ser anterior a hoje!'
       })
     } finally {
+      setParticipatEvent(null)
       setIsLoading(false)
     }
   }
@@ -93,7 +115,7 @@ const CreateEvent: FC = () => {
     <div className="grow w-full mx-auto max-w-7xl md:p-10">
       <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
         <h1 className="mb-3 font-bold text-5xl text-primary mr-3">
-          Crie agora seu evento!
+          Editando: {title}
         </h1>
       </div>
       <EventForm
@@ -101,11 +123,7 @@ const CreateEvent: FC = () => {
         register={register}
         errors={errors}
         setValue={setValue}
-        defaultDate={{
-          defautInicialDate: getValues('inicialDate') || currentDate,
-          defaultFinalDate:
-            getValues('finalDate') || getValues('inicialDate') || currentDate
-        }}
+        defaultDate={defaultDate}
         isLoading={isLoading}
       />
       <AlertEventDate
@@ -119,4 +137,4 @@ const CreateEvent: FC = () => {
   )
 }
 
-export default CreateEvent
+export default EditEvent

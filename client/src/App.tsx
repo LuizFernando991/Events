@@ -8,6 +8,7 @@ import Register from './pages/Register'
 import ProtectRoutes from './layouts/ProtectRoutes'
 import Dashboard from './pages/Dashboard'
 import CreateEvent from './pages/CreateEvent'
+import EditEvent from './pages/EditEvent'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<ProtectRoutes />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/events/create" element={<CreateEvent />} />
+              <Route path="/event/edit/:id" element={<EditEvent />} />
             </Route>
           </Route>
         </Routes>

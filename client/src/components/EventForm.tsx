@@ -8,20 +8,19 @@ import { DateRange } from 'react-day-picker'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import {
-  FieldErrors,
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue
-} from 'react-hook-form'
+import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { FormType } from '@/types/Event'
 
 type EventFormPropsType = {
   handleSubmit: () => void
+  isLoading: boolean
   register: UseFormRegister<FormType>
   errors: FieldErrors<FormType>
   setValue: UseFormSetValue<FormType>
-  getValues: UseFormGetValues<FormType>
+  defaultDate?: {
+    defautInicialDate: Date
+    defaultFinalDate: Date
+  }
 }
 
 const EventForm: FC<EventFormPropsType> = ({
@@ -29,17 +28,26 @@ const EventForm: FC<EventFormPropsType> = ({
   register,
   errors,
   setValue,
-  getValues
+  isLoading,
+  defaultDate
 }) => {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: getValues().inicialDate,
-    to: getValues().finalDate
-  })
+  const [date, setDate] = useState<DateRange | undefined>(undefined)
 
   useEffect(() => {
     setValue('inicialDate', date?.from)
     setValue('finalDate', date?.to)
   }, [date, setValue])
+
+  useEffect(() => {
+    setDate(
+      defaultDate
+        ? {
+            from: defaultDate.defautInicialDate,
+            to: defaultDate.defaultFinalDate
+          }
+        : undefined
+    )
+  }, [defaultDate])
 
   const formatedDateFrom = date?.from ? format(date?.from, 'dd, LLL, y') : null
   const formatedDateTo = date?.to ? format(date?.to, 'dd, LLL, y') : null
@@ -131,7 +139,7 @@ const EventForm: FC<EventFormPropsType> = ({
         <Button
           type="submit"
           size="lg"
-          disabled={false}
+          disabled={isLoading}
           className="max-w-[300px] w-full"
         >
           Criar
