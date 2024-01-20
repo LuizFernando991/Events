@@ -51,10 +51,10 @@ model Notification {
   viewed       Boolean          @default(false)
   type         NotificationType
   toUserId     Int
-  aboutEventId Int
+  aboutEventId Int?
 
-  aboutEvent Event @relation(fields: [aboutEventId], references: [id], onDelete: Cascade)
-  toUser     User  @relation(fields: [toUserId], references: [id], onDelete: Cascade)
+  aboutEvent Event? @relation(fields: [aboutEventId], references: [id], onDelete: Cascade)
+  toUser     User   @relation(fields: [toUserId], references: [id], onDelete: Cascade)
 }
 
 enum InvitationStatus {

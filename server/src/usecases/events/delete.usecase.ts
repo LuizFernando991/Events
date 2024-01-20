@@ -1,5 +1,6 @@
 import { IException } from 'src/domain/exceptions/exceptions.interface'
 import { EventRepository } from 'src/domain/repositories/eventRepositoryInterface'
+import { Event } from 'src/domain/model/event'
 
 export class DeleteEventUseCases {
   constructor(
@@ -7,7 +8,7 @@ export class DeleteEventUseCases {
     private readonly exceptionService: IException
   ) {}
 
-  async execulte(currentUserId: number, id: number): Promise<void> {
+  async execulte(currentUserId: number, id: number): Promise<Event> {
     const event = await this.eventRepository.getEvent(id, currentUserId)
     if (!event) {
       this.exceptionService.badRequestException({
@@ -18,7 +19,7 @@ export class DeleteEventUseCases {
     if (event.creator.id !== currentUserId) {
       this.exceptionService.forbiddenException()
     }
-    await this.eventRepository.delete(id)
-    return
+    const deletedEvent = await this.eventRepository.delete(id)
+    return deletedEvent
   }
 }

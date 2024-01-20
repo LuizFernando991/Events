@@ -223,6 +223,13 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        participants: {
+          select: {
+            id: true,
+            name: true,
+            username: true
+          }
+        },
         creator: {
           select: {
             id: true,
@@ -236,10 +243,33 @@ export class DatabaseEventRepository implements EventRepository {
     return newEvent
   }
 
-  async delete(id: number): Promise<void> {
-    await this.prisma.event.delete({
+  async delete(id: number): Promise<Event> {
+    return await this.prisma.event.delete({
       where: {
         id
+      },
+      select: {
+        id: true,
+        inicialDate: true,
+        finalDate: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        participants: {
+          select: {
+            id: true,
+            name: true,
+            username: true
+          }
+        },
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            username: true
+          }
+        }
       }
     })
   }

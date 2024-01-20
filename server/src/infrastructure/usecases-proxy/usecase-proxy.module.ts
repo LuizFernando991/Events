@@ -22,6 +22,11 @@ import { GetEventUseCases } from 'src/usecases/events/get.usecase'
 import { DeleteEventUseCases } from 'src/usecases/events/delete.usecase'
 import { UpdateEventUseCases } from 'src/usecases/events/update.usecase'
 import { ParticipateEventUseCases } from 'src/usecases/events/participate.usecase'
+import { CreateNotificationUseCases } from 'src/usecases/notification/create.usecases'
+import { NotificationRepository } from 'src/domain/repositories/notificationRepositoryInterface'
+import { SocketGateway } from '../socket/socket.gateway'
+import { DatabaseNotificationRepository } from '../repositories/notification.repository'
+import { SocketModule } from '../socket/socket.module.'
 
 @Module({
   imports: [
@@ -30,7 +35,8 @@ import { ParticipateEventUseCases } from 'src/usecases/events/participate.usecas
     RepositoriesModule,
     EmailModule,
     HashModule,
-    ExceptionsModule
+    ExceptionsModule,
+    SocketModule
   ]
 })
 export class UsecasesProxyModule {
@@ -42,6 +48,8 @@ export class UsecasesProxyModule {
   static EVENT_DELETE_PROXY = 'EventDeleteUseCasesProxy'
   static EVENT_UPDATE_PROXY = 'EventUpdateUseCasesProxy'
   static EVENT_PARTICIPATE_PROXY = 'EventParticipateUseCasesProxy'
+  static NOTIFICATION_CREATE_PROXY = 'NotificationCreateUseCasesProxy'
+  static SOCKET_EMIT_PROXY = 'SocketEmitUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -158,6 +166,26 @@ export class UsecasesProxyModule {
             new UseCaseProxy(
               new ParticipateEventUseCases(eventRepository, exceptionService)
             )
+        },
+        {
+          inject: [
+            DatabaseNotificationRepository,
+            ExceptionsService,
+            SocketGateway
+          ],
+          provide: UsecasesProxyModule.NOTIFICATION_CREATE_PROXY,
+          useFactory: (
+            notificationRepository: NotificationRepository,
+            exceptionService: ExceptionsService,
+            socketService: SocketGateway
+          ) =>
+            new UseCaseProxy(
+              new CreateNotificationUseCases(
+                notificationRepository,
+                exceptionService,
+                socketService
+              )
+            )
         }
       ],
       exports: [
@@ -168,7 +196,8 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.EVENT_GET_PROXY,
         UsecasesProxyModule.EVENT_DELETE_PROXY,
         UsecasesProxyModule.EVENT_UPDATE_PROXY,
-        UsecasesProxyModule.EVENT_PARTICIPATE_PROXY
+        UsecasesProxyModule.EVENT_PARTICIPATE_PROXY,
+        UsecasesProxyModule.NOTIFICATION_CREATE_PROXY
       ]
     }
   }

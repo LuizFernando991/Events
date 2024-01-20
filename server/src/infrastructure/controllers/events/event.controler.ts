@@ -23,6 +23,7 @@ import { DeleteEventUseCases } from 'src/usecases/events/delete.usecase'
 import { UpdateEventUseCases } from 'src/usecases/events/update.usecase'
 import { IJwtServicePayload } from 'src/domain/adapters/jwt.interface'
 import { ParticipateEventUseCases } from 'src/usecases/events/participate.usecase'
+import { CreateNotificationUseCases } from 'src/usecases/notification/create.usecases'
 
 @Controller('event')
 export class EventController {
@@ -36,7 +37,9 @@ export class EventController {
     @Inject(UsecasesProxyModule.EVENT_UPDATE_PROXY)
     private readonly UpdateEventUseCases: UseCaseProxy<UpdateEventUseCases>,
     @Inject(UsecasesProxyModule.EVENT_PARTICIPATE_PROXY)
-    private readonly ParticipateEventUseCases: UseCaseProxy<ParticipateEventUseCases>
+    private readonly ParticipateEventUseCases: UseCaseProxy<ParticipateEventUseCases>,
+    @Inject(UsecasesProxyModule.NOTIFICATION_CREATE_PROXY)
+    private readonly notificationCreateUseCases: UseCaseProxy<CreateNotificationUseCases>
   ) {}
 
   @Post('/')
@@ -69,6 +72,12 @@ export class EventController {
       id ? +id : undefined,
       data
     )
+    this.notificationCreateUseCases.getInstance().execute({
+      participants: newEvent.participants,
+      title: `O evento: ${newEvent.name}. Foi alterado`,
+      description: 'O evento que você estava participando foi alterado',
+      type: 'updated'
+    })
 
     return newEvent
   }
@@ -179,7 +188,16 @@ export class EventController {
     @CurrentUser() currentUser: IJwtServicePayload,
     @Param('id') id: string
   ) {
-    await this.DeleteEventUseCases.getInstance().execulte(currentUser.id, +id)
+    const deleteEvent = await this.DeleteEventUseCases.getInstance().execulte(
+      currentUser.id,
+      +id
+    )
+    this.notificationCreateUseCases.getInstance().execute({
+      participants: deleteEvent.participants,
+      title: `O evento: ${deleteEvent.name}. Foi cancelado`,
+      description: 'O evento que você estava participando foi cancelado',
+      type: 'canceled'
+    })
     return
   }
 }

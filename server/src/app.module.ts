@@ -11,6 +11,7 @@ import { JwtStrategy } from './infrastructure/strategies/jwt.strategy'
 import { JwtRefreshTokenStrategy } from './infrastructure/strategies/jwtRefresh.strategy'
 import { UsecasesProxyModule } from './infrastructure/usecases-proxy/usecase-proxy.module'
 import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
+import { SocketModule } from './infrastructure/socket/socket.module.'
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
     ExceptionsModule,
     EnvironmentConfigModule,
     JwtServiceModule,
-    ControllersModule
+    ControllersModule,
+    SocketModule
   ],
   controllers: [],
   providers: [LocalStrategy, JwtStrategy, JwtRefreshTokenStrategy]
