@@ -10,24 +10,30 @@ import Dashboard from './pages/Dashboard'
 import CreateEvent from './pages/CreateEvent'
 import EditEvent from './pages/EditEvent'
 import EventPage from './pages/Event'
+import { SocketProvider } from './contexts/socketcontext'
+import { NotificationsProvider } from './contexts/notificationscontext'
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<NavLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/" element={<ProtectRoutes />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/events/create" element={<CreateEvent />} />
-              <Route path="/event/:id" element={<EventPage />} />
-              <Route path="/event/edit/:id" element={<EditEvent />} />
-            </Route>
-          </Route>
-        </Routes>
+        <SocketProvider>
+          <NotificationsProvider>
+            <Routes>
+              <Route path="/" element={<NavLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/" element={<ProtectRoutes />}>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/events/create" element={<CreateEvent />} />
+                  <Route path="/event/:id" element={<EventPage />} />
+                  <Route path="/event/edit/:id" element={<EditEvent />} />
+                </Route>
+              </Route>
+            </Routes>
+          </NotificationsProvider>
+        </SocketProvider>
       </AuthProvider>
     </Router>
   )
