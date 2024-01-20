@@ -6,16 +6,19 @@ import LoadingScreen from '@/components/LoadingScreen'
 import { Event } from '@/types/Event'
 import { Calendar } from '@/components/ui/calendar'
 import { Label } from '@/components/ui/label'
-import { CalendarIcon, Edit, Loader2, Trash } from 'lucide-react'
+import { CalendarIcon, Edit, Eye, Loader2, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Participant } from '@/types/Participant'
+import EventParticipations from '@/components/EventParticipations'
 
 const EventPage = () => {
   const { id } = useParams()
   const [isLoading, setIsLoding] = useState(false)
   const [isToggleParticipation, setIsToggleParticipation] = useState(false)
+  const [participanstViewOpen, setParticipanstViewOpen] = useState(false)
   const [isDeleting, setIsDelting] = useState(false)
   const [event, setEvent] = useState<Event | null>(null)
-  const [participants, setParticipants] = useState(null)
+  const [participants, setParticipants] = useState<Participant[] | null>(null)
   const api = useApi({ shouldRefreshToken: true })
   const navigate = useNavigate()
   useEffect(() => {
@@ -37,7 +40,6 @@ const EventPage = () => {
   }, [api, id])
 
   const toggleParticipation = async () => {
-    console.log('fasfs')
     try {
       setIsToggleParticipation(true)
       const { data } = await api.put(`/event/participate/${id}`)
@@ -50,6 +52,24 @@ const EventPage = () => {
     } finally {
       setIsToggleParticipation(false)
     }
+  }
+
+  const showParticipants = async () => {
+    if (!participants) {
+      try {
+        setParticipanstViewOpen(true)
+        const { data } = await api.get(`/event/participations/${id}`)
+        setParticipants(data)
+        return
+      } catch (err) {
+        toast({
+          variant: 'destructive',
+          title: 'Ah não! Algo deu errado, tente mais tarde.'
+        })
+        return
+      }
+    }
+    setParticipanstViewOpen(true)
   }
 
   const onDelete = async (id: number) => {
@@ -80,7 +100,7 @@ const EventPage = () => {
         <h1 className="mb-3 font-bold text-5xl text-primary mr-3">
           {event.name}
         </h1>
-        {!event.creator?.id ? (
+        {event.creator?.id ? (
           <div className="flex gap-4 items-center">
             <Button
               onClick={() => {
@@ -156,9 +176,25 @@ const EventPage = () => {
           >
             Mais sobre esse evento:
           </Label>
-          <p className="w-full py-10 sm:px-40 sm:py-20 whitespace-pre-wrap">
+          <p className="w-full py-10 sm:px-40 sm:py-20 whitespace-pre-wrap break-words">
             {event.description}
           </p>
+        </div>
+        <div className="w-full flex gap-4 space-y-1.5 items-center mt-20">
+          <Label
+            htmlFor="date"
+            className="flex items-center gap-4 text-primary font-bold text-xl"
+          >
+            Veja quem já está participando:
+          </Label>
+          <Button
+            onClick={showParticipants}
+            size="icon"
+            className="w-full"
+            variant="ghost"
+          >
+            <Eye />
+          </Button>
         </div>
         <div className="w-full flex gap-4 space-y-1.5 items-center mt-20">
           <Label
@@ -172,6 +208,12 @@ const EventPage = () => {
           </p>
         </div>
       </div>
+      <EventParticipations
+        isOpen={participanstViewOpen}
+        setIsOpen={() => setParticipanstViewOpen(false)}
+        participations={participants}
+        isLoading={!participants}
+      />
     </div>
   )
 }

@@ -37,7 +37,7 @@ const EventCard: FC<EventCardPropsType> = ({ event, isLoading, onDelete }) => {
           <h3 className="truncate text-md font-medium text-zinc-500 mb-2">
             Sobre esse evento:
           </h3>
-          <p className="font-medium text-zinc-500 h-20 overflow-hidden whitespace-pre-wrap">
+          <p className="font-medium text-zinc-500 h-20 overflow-hidden whitespace-pre-wrap break-words">
             {event.description}
           </p>
         </div>
