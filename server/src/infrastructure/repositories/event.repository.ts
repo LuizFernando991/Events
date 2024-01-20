@@ -11,6 +11,7 @@ import {
   UpdateEventType
 } from 'src/domain/types/event.type'
 import { Prisma } from '@prisma/client'
+import { ParticipationType } from 'src/domain/types/participation'
 
 @Injectable()
 export class DatabaseEventRepository implements EventRepository {
@@ -316,5 +317,23 @@ export class DatabaseEventRepository implements EventRepository {
       ...newEvent,
       userIsParticipates: !!newEvent.participants.length
     }
+  }
+
+  async getParticipantions(id: number): Promise<ParticipationType[]> {
+    const { participants } = await this.prisma.event.findUnique({
+      where: {
+        id
+      },
+      select: {
+        participants: {
+          select: {
+            name: true,
+            username: true
+          }
+        }
+      }
+    })
+
+    return participants
   }
 }

@@ -7,6 +7,7 @@ import {
   RegisterEventType,
   UpdateEventType
 } from '../types/event.type'
+import { ParticipationType } from '../types/participation'
 
 export interface EventRepository {
   insert(user: RegisterEventType): Promise<Event>
@@ -22,4 +23,5 @@ export interface EventRepository {
     userId: number,
     userAreadyParticipate: boolean
   ): Promise<GetEventResType>
+  getParticipantions(id: number): Promise<ParticipationType[]>
 }

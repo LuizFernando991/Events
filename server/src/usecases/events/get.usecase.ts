@@ -30,4 +30,14 @@ export class GetEventUseCases {
       await this.eventRepository.getEventsThatUserParticipates(options)
     return events
   }
+
+  async getParticipations(id: number) {
+    if (!id || typeof id !== 'number') {
+      this.exceptionService.badRequestException({
+        message: 'invalid id'
+      })
+    }
+
+    return await this.eventRepository.getParticipantions(id)
+  }
 }

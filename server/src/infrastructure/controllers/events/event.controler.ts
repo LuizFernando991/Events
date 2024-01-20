@@ -107,6 +107,13 @@ export class EventController {
     return events
   }
 
+  @Get('/participations/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async getParticipantions(@Param('id') id: string) {
+    return this.GetEventUseCases.getInstance().getParticipations(+id)
+  }
+
   @Get('/userevents')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
