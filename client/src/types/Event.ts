@@ -6,10 +6,11 @@ export type Event = {
   description: string
   createdAt: Date
   inicialDate: Date
-  FinalDate: Date
+  finalDate: Date
   creatorId: number
   creator?: Partial<User>
   participants?: Partial<User>[]
+  userIsParticipates?: boolean
 }
 
 export type FormType = {
