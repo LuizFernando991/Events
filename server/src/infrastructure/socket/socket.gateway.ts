@@ -27,11 +27,13 @@ export class SocketGateway
 
   async handleConnection(socket: Socket) {
     const cookies = socket.handshake.headers.cookie
-    const refresh = cookies.split(';')[0].split('=')[1]
-    const user = await this.jwtService.verify(refresh, {
-      secret: process.env.JWT_REFRESH_TOKEN_SECRET
-    })
-    socket.join(`${user.id}`)
+    if (cookies) {
+      const refresh = cookies.split(';')[0].split('=')[1]
+      const user = await this.jwtService.verify(refresh, {
+        secret: process.env.JWT_REFRESH_TOKEN_SECRET
+      })
+      socket.join(`${user.id}`)
+    }
   }
 
   emitNotification(userId: number, data: Notification) {
