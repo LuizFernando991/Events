@@ -135,8 +135,14 @@ export class EventController {
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  async getEvemt(@Param('id') id: string) {
-    const events = await this.GetEventUseCases.getInstance().getEvent(+id)
+  async getEvemt(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: IJwtServicePayload
+  ) {
+    const events = await this.GetEventUseCases.getInstance().getEvent(
+      +id,
+      currentUser.id
+    )
 
     return events
   }

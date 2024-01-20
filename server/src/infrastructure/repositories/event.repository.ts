@@ -4,6 +4,7 @@ import { EventRepository } from 'src/domain/repositories/eventRepositoryInterfac
 import { Event } from 'src/domain/model/event'
 import {
   GetEventOptionsType,
+  GetEventResType,
   GetEventsResType,
   GetEventsThatUserParticipatesType,
   RegisterEventType,
@@ -46,7 +47,7 @@ export class DatabaseEventRepository implements EventRepository {
     return newEvent
   }
 
-  async getEvent(id: number): Promise<Event> {
+  async getEvent(id: number, userId: number): Promise<GetEventResType> {
     const event = await this.prisma.event.findUnique({
       where: { id },
       select: {
@@ -57,6 +58,11 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        participants: {
+          where: {
+            id: userId
+          }
+        },
         creator: {
           select: {
             id: true,
@@ -67,7 +73,12 @@ export class DatabaseEventRepository implements EventRepository {
       }
     })
 
-    return event
+    const formattedEvent = {
+      ...event,
+      userIsParticipates: !!event.participants.length
+    }
+
+    return formattedEvent
   }
 
   async get(options: GetEventOptionsType): Promise<GetEventsResType> {

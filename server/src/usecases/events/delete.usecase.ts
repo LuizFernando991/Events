@@ -8,7 +8,7 @@ export class DeleteEventUseCases {
   ) {}
 
   async execulte(currentUserId: number, id: number): Promise<void> {
-    const event = await this.eventRepository.getEvent(id)
+    const event = await this.eventRepository.getEvent(id, currentUserId)
     if (!event) {
       this.exceptionService.badRequestException({
         code_error: 404,

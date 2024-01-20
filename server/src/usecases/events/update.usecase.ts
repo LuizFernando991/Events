@@ -25,7 +25,7 @@ export class UpdateEventUseCases {
         code_error: 400,
         message: 'invalid date'
       })
-    const event = await this.eventRepository.getEvent(eventId)
+    const event = await this.eventRepository.getEvent(eventId, userId)
     if (event.creator.id !== userId) {
       this.exceptionService.forbiddenException()
     }

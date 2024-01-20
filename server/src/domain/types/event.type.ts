@@ -30,4 +30,8 @@ export type GetEventsResType = {
   currentPage: number
 }
 
+export type GetEventResType = Event & {
+  userIsParticipates: boolean
+}
+
 export type UpdateEventType = Partial<RegisterEventType>

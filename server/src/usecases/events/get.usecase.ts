@@ -2,10 +2,10 @@ import { IException } from 'src/domain/exceptions/exceptions.interface'
 import { EventRepository } from 'src/domain/repositories/eventRepositoryInterface'
 import {
   GetEventOptionsType,
+  GetEventResType,
   GetEventsResType,
   GetEventsThatUserParticipatesType
 } from 'src/domain/types/event.type'
-import { Event } from 'src/domain/model/event'
 
 export class GetEventUseCases {
   constructor(
@@ -13,8 +13,8 @@ export class GetEventUseCases {
     private readonly exceptionService: IException
   ) {}
 
-  async getEvent(id: number): Promise<Event> {
-    const event = await this.eventRepository.getEvent(id)
+  async getEvent(id: number, userId: number): Promise<GetEventResType> {
+    const event = await this.eventRepository.getEvent(id, userId)
     return event
   }
 
