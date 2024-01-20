@@ -18,6 +18,10 @@ export class DatabaseEventRepository implements EventRepository {
     const newEvent = await this.prisma.event.create({
       data: {
         ...eventData,
+        inicialDate: new Date(
+          new Date(eventData.inicialDate).setHours(0, 0, 0, 0)
+        ),
+        finalDate: new Date(new Date(eventData.finalDate).setHours(0, 0, 0, 0)),
         participants: { connect: [{ id: eventData.creatorId }] }
       },
       select: {
@@ -80,17 +84,13 @@ export class DatabaseEventRepository implements EventRepository {
       }
     }
 
-    if (options.inicialDate) {
+    if (options.inicialDate && options.finalDate) {
       where = {
         ...where,
-        inicialDate: { gte: options.inicialDate }
-      }
-    }
-
-    if (options.finalDate) {
-      where = {
-        ...where,
-        finalDate: { lte: options.finalDate }
+        AND: [
+          { finalDate: { gte: new Date(options.inicialDate) } },
+          { inicialDate: { lte: new Date(options.finalDate) } }
+        ]
       }
     }
 
@@ -147,19 +147,16 @@ export class DatabaseEventRepository implements EventRepository {
       }
     }
 
-    if (options.inicialDate) {
+    if (options.inicialDate && options.finalDate) {
       where = {
         ...where,
-        inicialDate: { gte: options.inicialDate }
+        AND: [
+          { finalDate: { gte: new Date(options.inicialDate) } },
+          { inicialDate: { lte: new Date(options.finalDate) } }
+        ]
       }
     }
 
-    if (options.finalDate) {
-      where = {
-        ...where,
-        finalDate: { lte: options.finalDate }
-      }
-    }
     const totalEvents = await this.prisma.event.count({ where })
     const totalPages = Math.ceil(totalEvents / limit)
 

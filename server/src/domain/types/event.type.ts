@@ -4,24 +4,24 @@ export type RegisterEventType = {
   name: string
   creatorId: number
   description: string
-  inicialDate: Date
-  finalDate: Date
+  inicialDate: string
+  finalDate: string
 }
 
 export type GetEventOptionsType = {
   creatorId?: number
   page?: number
   search?: string
-  inicialDate?: Date
-  finalDate?: Date
+  inicialDate?: string
+  finalDate?: string
 }
 
 export type GetEventsThatUserParticipatesType = {
   userId: number
   page?: number
   search?: string
-  inicialDate?: Date
-  finalDate?: Date
+  inicialDate?: string
+  finalDate?: string
 }
 
 export type GetEventsResType = {

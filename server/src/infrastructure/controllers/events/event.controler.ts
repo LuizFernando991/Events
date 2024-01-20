@@ -37,8 +37,8 @@ export class EventController {
   async create(@Body() data: CreateEventDto, @CurrentUser() currentUser) {
     const event = await this.CreateEventUseCases.getInstance().execute({
       ...data,
-      inicialDate: new Date(data.inicialDate),
-      finalDate: new Date(data.finalDate),
+      inicialDate: data.inicialDate,
+      finalDate: data.finalDate,
       creatorId: currentUser.id
     })
 
@@ -57,8 +57,8 @@ export class EventController {
     const events = await this.GetEventUseCases.getInstance().getEvents({
       page: page ? +page : 1,
       search,
-      inicialDate: inicialDate ? new Date(inicialDate) : undefined,
-      finalDate: finalDate ? new Date(finalDate) : undefined
+      inicialDate: inicialDate ? inicialDate : undefined,
+      finalDate: finalDate ? finalDate : undefined
     })
 
     return events
@@ -78,8 +78,8 @@ export class EventController {
       creatorId: currentUser.id,
       page: page ? +page : 1,
       search,
-      inicialDate: inicialDate ? new Date(inicialDate) : undefined,
-      finalDate: finalDate ? new Date(finalDate) : undefined
+      inicialDate: inicialDate ? inicialDate : undefined,
+      finalDate: finalDate ? finalDate : undefined
     })
 
     return events
@@ -100,8 +100,8 @@ export class EventController {
         userId: currentUser.id,
         page: page ? +page : 1,
         search,
-        inicialDate: inicialDate ? new Date(inicialDate) : undefined,
-        finalDate: finalDate ? new Date(finalDate) : undefined
+        inicialDate: inicialDate ? inicialDate : undefined,
+        finalDate: finalDate ? finalDate : undefined
       })
 
     return events

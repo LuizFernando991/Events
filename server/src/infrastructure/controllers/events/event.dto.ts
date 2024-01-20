@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator'
+import { PartialType } from '@nestjs/mapped-types'
 
 export class CreateEventDto {
   @IsString()
@@ -17,3 +18,5 @@ export class CreateEventDto {
   @IsString()
   finalDate: string
 }
+
+export class EditEventDto extends PartialType(CreateEventDto) {}
