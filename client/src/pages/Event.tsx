@@ -10,9 +10,11 @@ import { CalendarIcon, Edit, Eye, Loader2, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Participant } from '@/types/Participant'
 import EventParticipations from '@/components/EventParticipations'
+import useAuth from '@/hooks/useAuth'
 
 const EventPage = () => {
   const { id } = useParams()
+  const { user } = useAuth()
   const [isLoading, setIsLoding] = useState(false)
   const [isToggleParticipation, setIsToggleParticipation] = useState(false)
   const [participanstViewOpen, setParticipanstViewOpen] = useState(false)
@@ -101,7 +103,7 @@ const EventPage = () => {
         <h1 className="mb-3 font-bold text-5xl text-primary mr-3">
           {event.name}
         </h1>
-        {event.creator?.id ? (
+        {event.creator?.id === user?.id ? (
           <div className="flex gap-4 items-center ml-auto">
             <Button
               onClick={() => {
