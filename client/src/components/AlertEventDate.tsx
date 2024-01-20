@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
@@ -30,7 +29,7 @@ const AlertEventDate: FC<AlertEventDatePropsType> = ({
           <DialogTitle className="mb-8">
             Você já está participando de um evento!
           </DialogTitle>
-          <DialogDescription>
+          <div>
             <div>
               Nessa data você estará participando do evento:{' '}
               <span className="font-bold text-black">{title}</span>, tem certeza
@@ -51,7 +50,7 @@ const AlertEventDate: FC<AlertEventDatePropsType> = ({
                 Confirmar
               </Button>
             </form>
-          </DialogDescription>
+          </div>
         </DialogHeader>
       </DialogContent>
     </Dialog>
