@@ -242,4 +242,79 @@ export class DatabaseEventRepository implements EventRepository {
       }
     })
   }
+
+  async participateEvent(
+    id: number,
+    userId: number,
+    userAreadyParticipate: boolean
+  ): Promise<GetEventResType> {
+    if (!userAreadyParticipate) {
+      const newEvent = await this.prisma.event.update({
+        where: {
+          id
+        },
+        data: {
+          participants: { connect: { id: userId } }
+        },
+        select: {
+          id: true,
+          inicialDate: true,
+          finalDate: true,
+          name: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+          participants: {
+            where: {
+              id: userId
+            }
+          },
+          creator: {
+            select: {
+              id: true,
+              name: true,
+              username: true
+            }
+          }
+        }
+      })
+      return {
+        ...newEvent,
+        userIsParticipates: !!newEvent.participants.length
+      }
+    }
+    const newEvent = await this.prisma.event.update({
+      where: {
+        id
+      },
+      data: {
+        participants: { disconnect: { id: userId } }
+      },
+      select: {
+        id: true,
+        inicialDate: true,
+        finalDate: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        participants: {
+          where: {
+            id: userId
+          }
+        },
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            username: true
+          }
+        }
+      }
+    })
+    return {
+      ...newEvent,
+      userIsParticipates: !!newEvent.participants.length
+    }
+  }
 }

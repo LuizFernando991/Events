@@ -22,6 +22,7 @@ import { GetEventUseCases } from 'src/usecases/events/get.usecase'
 import { DeleteEventUseCases } from 'src/usecases/events/delete.usecase'
 import { UpdateEventUseCases } from 'src/usecases/events/update.usecase'
 import { IJwtServicePayload } from 'src/domain/adapters/jwt.interface'
+import { ParticipateEventUseCases } from 'src/usecases/events/participate.usecase'
 
 @Controller('event')
 export class EventController {
@@ -33,7 +34,9 @@ export class EventController {
     @Inject(UsecasesProxyModule.EVENT_DELETE_PROXY)
     private readonly DeleteEventUseCases: UseCaseProxy<DeleteEventUseCases>,
     @Inject(UsecasesProxyModule.EVENT_UPDATE_PROXY)
-    private readonly UpdateEventUseCases: UseCaseProxy<UpdateEventUseCases>
+    private readonly UpdateEventUseCases: UseCaseProxy<UpdateEventUseCases>,
+    @Inject(UsecasesProxyModule.EVENT_PARTICIPATE_PROXY)
+    private readonly ParticipateEventUseCases: UseCaseProxy<ParticipateEventUseCases>
   ) {}
 
   @Post('/')
@@ -67,6 +70,21 @@ export class EventController {
       data
     )
 
+    return newEvent
+  }
+
+  @Put('/participate/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async participate(
+    @CurrentUser() currentUser: IJwtServicePayload,
+    @Param('id') id: string
+  ) {
+    const newEvent =
+      await this.ParticipateEventUseCases.getInstance().participate(
+        +id,
+        currentUser.id
+      )
     return newEvent
   }
 

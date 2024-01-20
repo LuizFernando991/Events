@@ -21,6 +21,7 @@ import { CreateEventUseCases } from 'src/usecases/events/create.usecase'
 import { GetEventUseCases } from 'src/usecases/events/get.usecase'
 import { DeleteEventUseCases } from 'src/usecases/events/delete.usecase'
 import { UpdateEventUseCases } from 'src/usecases/events/update.usecase'
+import { ParticipateEventUseCases } from 'src/usecases/events/participate.usecase'
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ export class UsecasesProxyModule {
   static EVENT_GET_PROXY = 'EventGetUseCasesProxy'
   static EVENT_DELETE_PROXY = 'EventDeleteUseCasesProxy'
   static EVENT_UPDATE_PROXY = 'EventUpdateUseCasesProxy'
+  static EVENT_PARTICIPATE_PROXY = 'EventParticipateUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -145,6 +147,17 @@ export class UsecasesProxyModule {
             new UseCaseProxy(
               new UpdateEventUseCases(eventRepository, exceptionService)
             )
+        },
+        {
+          inject: [DatabaseEventRepository, ExceptionsService],
+          provide: UsecasesProxyModule.EVENT_PARTICIPATE_PROXY,
+          useFactory: (
+            eventRepository: EventRepository,
+            exceptionService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new ParticipateEventUseCases(eventRepository, exceptionService)
+            )
         }
       ],
       exports: [
@@ -154,7 +167,8 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.EVENT_CREATE_PROXY,
         UsecasesProxyModule.EVENT_GET_PROXY,
         UsecasesProxyModule.EVENT_DELETE_PROXY,
-        UsecasesProxyModule.EVENT_UPDATE_PROXY
+        UsecasesProxyModule.EVENT_UPDATE_PROXY,
+        UsecasesProxyModule.EVENT_PARTICIPATE_PROXY
       ]
     }
   }

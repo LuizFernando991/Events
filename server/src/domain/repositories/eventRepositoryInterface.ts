@@ -17,4 +17,9 @@ export interface EventRepository {
   getEventsThatUserParticipates(
     options: GetEventsThatUserParticipatesType
   ): Promise<GetEventsResType>
+  participateEvent(
+    id: number,
+    userId: number,
+    userAreadyParticipate: boolean
+  ): Promise<GetEventResType>
 }
