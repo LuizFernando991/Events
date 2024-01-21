@@ -6,3 +6,9 @@ export type User = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type SearchedUser = {
+  id: number
+  name: string
+  username: string
+}

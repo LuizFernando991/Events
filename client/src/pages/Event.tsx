@@ -11,11 +11,13 @@ import { Button } from '@/components/ui/button'
 import { Participant } from '@/types/Participant'
 import EventParticipations from '@/components/EventParticipations'
 import useAuth from '@/hooks/useAuth'
+import EventInvitation from '@/components/EventInvitation'
 
 const EventPage = () => {
   const { id } = useParams()
   const { user } = useAuth()
   const [isLoading, setIsLoding] = useState(false)
+  const [inviteViewOpen, setInviteViewOpen] = useState(false)
   const [isToggleParticipation, setIsToggleParticipation] = useState(false)
   const [participanstViewOpen, setParticipanstViewOpen] = useState(false)
   const [isDeleting, setIsDelting] = useState(false)
@@ -105,6 +107,13 @@ const EventPage = () => {
         </h1>
         {event.creator?.id === user?.id ? (
           <div className="flex gap-4 items-center ml-auto">
+            <Button
+              onClick={() => setInviteViewOpen(true)}
+              className="w-full"
+              variant="default"
+            >
+              Convide pessoas para seu evento!
+            </Button>
             <Button
               onClick={() => {
                 navigate(`/event/edit/${event.id}`)
@@ -222,6 +231,11 @@ const EventPage = () => {
         setIsOpen={() => setParticipanstViewOpen(false)}
         participations={participants}
         isLoading={!participants}
+      />
+      <EventInvitation
+        isOpen={inviteViewOpen}
+        setIsOpen={() => setInviteViewOpen(false)}
+        eventId={id ? +id : undefined}
       />
     </div>
   )
