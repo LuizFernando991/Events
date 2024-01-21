@@ -31,6 +31,8 @@ model Event {
   description String
   inicialDate DateTime
   finalDate   DateTime
+  inicialTime String
+  finalTime   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

@@ -14,21 +14,24 @@ export class UpdateEventUseCases {
         message: 'invalid id'
       })
     }
-    const currentDate = new Date().setHours(0, 0, 0, 0)
-    const compareDate = new Date(currentDate)
-    if (
-      compareDate > new Date(eventData.inicialDate) ||
-      compareDate > new Date(eventData.finalDate) ||
-      new Date(eventData.inicialDate) > new Date(eventData.finalDate)
-    )
-      this.exceptionService.badRequestException({
-        code_error: 400,
-        message: 'invalid date'
-      })
     const event = await this.eventRepository.getEvent(eventId, userId)
     if (event.creator.id !== userId) {
       this.exceptionService.forbiddenException()
     }
+    if (event.inicialDate !== new Date(eventData.inicialDate)) {
+      const currentDate = new Date()
+      const compareDate = new Date(currentDate)
+      if (
+        compareDate > new Date(eventData.inicialDate) ||
+        compareDate > new Date(eventData.finalDate) ||
+        new Date(eventData.inicialDate) > new Date(eventData.finalDate)
+      )
+        this.exceptionService.badRequestException({
+          code_error: 400,
+          message: 'invalid date'
+        })
+    }
+
     const newEvent = await this.eventRepository.update(eventId, eventData)
     return newEvent
   }

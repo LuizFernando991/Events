@@ -35,6 +35,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         creator: {
           select: {
             id: true,
@@ -59,6 +61,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         participants: {
           where: {
             id: userId
@@ -126,6 +130,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         creator: {
           select: {
             id: true,
@@ -188,6 +194,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         creator: {
           select: {
             id: true,
@@ -223,6 +231,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         participants: {
           select: {
             id: true,
@@ -256,6 +266,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         participants: {
           select: {
             id: true,
@@ -295,6 +307,8 @@ export class DatabaseEventRepository implements EventRepository {
           description: true,
           createdAt: true,
           updatedAt: true,
+          inicialTime: true,
+          finalTime: true,
           participants: {
             where: {
               id: userId
@@ -329,6 +343,8 @@ export class DatabaseEventRepository implements EventRepository {
         description: true,
         createdAt: true,
         updatedAt: true,
+        inicialTime: true,
+        finalTime: true,
         participants: {
           where: {
             id: userId

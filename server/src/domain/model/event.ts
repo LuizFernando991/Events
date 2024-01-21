@@ -6,6 +6,8 @@ export class Event {
   finalDate: Date
   createdAt: Date
   updatedAt: Date
+  inicialTime: string
+  finalTime: string
   participants?: { id: number; name: string; username: string }[]
   creator: {
     id: number

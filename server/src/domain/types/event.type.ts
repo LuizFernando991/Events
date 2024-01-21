@@ -6,6 +6,8 @@ export type RegisterEventType = {
   description: string
   inicialDate: string
   finalDate: string
+  inicialTime: string
+  finalTime: string
 }
 
 export type GetEventOptionsType = {

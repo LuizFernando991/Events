@@ -9,7 +9,7 @@ export class CreateEventUseCases {
   ) {}
 
   async execute(eventData: RegisterEventType) {
-    const currentDate = new Date().setHours(0, 0, 0, 0)
+    const currentDate = new Date()
     const compareDate = new Date(currentDate)
     if (
       compareDate > new Date(eventData.inicialDate) ||

@@ -17,6 +17,14 @@ export class CreateEventDto {
   @IsNotEmpty()
   @IsString()
   finalDate: string
+
+  @IsNotEmpty()
+  @IsString()
+  finalTime: string
+
+  @IsNotEmpty()
+  @IsString()
+  inicialTime: string
 }
 
 export class UpdateEventDto extends PartialType(CreateEventDto) {}
