@@ -98,9 +98,12 @@ const EventForm: FC<EventFormPropsType> = ({
           <div className={cn('grid gap-2')}>
             <Calendar
               id="date"
-              initialFocus
               mode="range"
-              defaultMonth={date?.from}
+              defaultMonth={
+                defaultDate?.defautInicialDate
+                  ? new Date(defaultDate.defautInicialDate)
+                  : undefined
+              }
               selected={date}
               onSelect={setDate}
               numberOfMonths={3}

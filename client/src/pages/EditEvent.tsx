@@ -6,6 +6,7 @@ import { useApi } from '@/hooks/useApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '@/components/ui/use-toast'
 import AlertEventDate from '@/components/AlertEventDate'
+import LoadingScreen from '@/components/LoadingScreen'
 
 const EditEvent: FC = () => {
   const currentDate = new Date()
@@ -17,6 +18,7 @@ const EditEvent: FC = () => {
     defaultFinalDate: currentDate
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [isFetching, setIsFeating] = useState(false)
   const [participatEvent, setParticipatEvent] = useState<Event | null>(null)
   const api = useApi({ shouldRefreshToken: true })
   const navigate = useNavigate()
@@ -39,6 +41,7 @@ const EditEvent: FC = () => {
   })
 
   useEffect(() => {
+    setIsFeating(true)
     const fetchEvent = async () => {
       const res = await api.get(`/event/${id}`)
       const inicialDate = new Date(res.data.inicialDate)
@@ -54,6 +57,8 @@ const EditEvent: FC = () => {
       })
       setDefaultFinalTime(res.data.finalTime)
       setDefaultInicialTipe(res.data.inicialTime)
+
+      setIsFeating(false)
     }
     fetchEvent()
   }, [api, id, setValue])
@@ -116,7 +121,9 @@ const EditEvent: FC = () => {
       setIsLoading(false)
     }
   }
-
+  if (isFetching) {
+    return <LoadingScreen />
+  }
   return (
     <div className="grow w-full mx-auto max-w-7xl md:p-10">
       <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
