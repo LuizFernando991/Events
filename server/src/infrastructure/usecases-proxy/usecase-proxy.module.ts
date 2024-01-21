@@ -29,6 +29,10 @@ import { DatabaseNotificationRepository } from '../repositories/notification.rep
 import { SocketModule } from '../socket/socket.module.'
 import { GetNotificationUseCases } from 'src/usecases/notification/get.usecases'
 import { UpdateNotificationUseCases } from 'src/usecases/notification/update.usecases'
+import { DatabaseInvitationRepository } from '../repositories/invitation.repository'
+import { InvitationRepository } from 'src/domain/repositories/invitationRepositoryInterface'
+import { CreateInvitationUseCases } from 'src/usecases/invitation/create.usecase'
+import { RespondInvitationUseCases } from 'src/usecases/invitation/respond.usecase'
 
 @Module({
   imports: [
@@ -54,6 +58,8 @@ export class UsecasesProxyModule {
   static SOCKET_EMIT_PROXY = 'SocketEmitUseCasesProxy'
   static NOTIFICATION_GET_PROXY = 'NotificationGetUseCasesProxy'
   static NOTIFICATION_UPDATE_PROXY = 'NotificationUpdateUseCasesProxy'
+  static INVITATION_CREATE_PROXY = 'InvitationCreateUseCasesProxy'
+  static INVITATION_RESPOND_PROXY = 'InvitationRespondUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -218,6 +224,46 @@ export class UsecasesProxyModule {
                 exceptionService
               )
             )
+        },
+        {
+          inject: [
+            DatabaseEventRepository,
+            DatabaseInvitationRepository,
+            ExceptionsService
+          ],
+          provide: UsecasesProxyModule.INVITATION_CREATE_PROXY,
+          useFactory: (
+            eventRepository: EventRepository,
+            invitationRepository: InvitationRepository,
+            exceptionService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new CreateInvitationUseCases(
+                eventRepository,
+                invitationRepository,
+                exceptionService
+              )
+            )
+        },
+        {
+          inject: [
+            DatabaseEventRepository,
+            DatabaseInvitationRepository,
+            ExceptionsService
+          ],
+          provide: UsecasesProxyModule.INVITATION_RESPOND_PROXY,
+          useFactory: (
+            eventRepository: EventRepository,
+            invitationRepository: InvitationRepository,
+            exceptionService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new RespondInvitationUseCases(
+                eventRepository,
+                invitationRepository,
+                exceptionService
+              )
+            )
         }
       ],
       exports: [
@@ -231,7 +277,8 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.EVENT_PARTICIPATE_PROXY,
         UsecasesProxyModule.NOTIFICATION_CREATE_PROXY,
         UsecasesProxyModule.NOTIFICATION_GET_PROXY,
-        UsecasesProxyModule.NOTIFICATION_UPDATE_PROXY
+        UsecasesProxyModule.NOTIFICATION_UPDATE_PROXY,
+        UsecasesProxyModule.INVITATION_CREATE_PROXY
       ]
     }
   }
