@@ -27,13 +27,17 @@ export class SocketGateway
   constructor(private readonly jwtService: JwtService) {}
 
   async handleConnection(socket: Socket) {
-    const cookies = socket.handshake.headers.cookie
-    if (cookies) {
-      const refresh = cookies.split(';')[0].split('=')[1]
-      const user = await this.jwtService.verify(refresh, {
-        secret: process.env.JWT_REFRESH_TOKEN_SECRET
-      })
-      socket.join(`${user.id}`)
+    try {
+      const cookies = socket.handshake.headers.cookie
+      if (cookies) {
+        const refresh = cookies.split(';')[0].split('=')[1]
+        const user = await this.jwtService.verify(refresh, {
+          secret: process.env.JWT_REFRESH_TOKEN_SECRET
+        })
+        socket.join(`${user.id}`)
+      }
+    } catch (err) {
+      //err
     }
   }
 
