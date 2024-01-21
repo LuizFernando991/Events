@@ -4,3 +4,9 @@ export type RegisterUserType = {
   password: string
   name: string
 }
+
+export type SearchUserResType = {
+  id: number
+  name: string
+  username: string
+}

@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../db/prisma.service'
 import { UserRepository } from 'src/domain/repositories/userRepositoryInterface'
 import { UserM } from 'src/domain/model/user'
-import { RegisterUserType } from 'src/domain/types/user.types'
+import {
+  RegisterUserType,
+  SearchUserResType
+} from 'src/domain/types/user.types'
 
 @Injectable()
 export class DatabaseUserRepository implements UserRepository {
@@ -63,5 +66,20 @@ export class DatabaseUserRepository implements UserRepository {
       return null
     }
     return user
+  }
+
+  async getSearchUsers(id: number): Promise<SearchUserResType[]> {
+    return await this.prisma.user.findMany({
+      where: {
+        id: {
+          not: id
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true
+      }
+    })
   }
 }

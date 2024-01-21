@@ -33,6 +33,7 @@ import { DatabaseInvitationRepository } from '../repositories/invitation.reposit
 import { InvitationRepository } from 'src/domain/repositories/invitationRepositoryInterface'
 import { CreateInvitationUseCases } from 'src/usecases/invitation/create.usecase'
 import { RespondInvitationUseCases } from 'src/usecases/invitation/respond.usecase'
+import { GetUserUseCases } from 'src/usecases/user/get.usecases'
 
 @Module({
   imports: [
@@ -60,11 +61,18 @@ export class UsecasesProxyModule {
   static NOTIFICATION_UPDATE_PROXY = 'NotificationUpdateUseCasesProxy'
   static INVITATION_CREATE_PROXY = 'InvitationCreateUseCasesProxy'
   static INVITATION_RESPOND_PROXY = 'InvitationRespondUseCasesProxy'
+  static USER_GET_USECASES_PROXY = 'UserGetUseCasesProxy'
 
   static register(): DynamicModule {
     return {
       module: UsecasesProxyModule,
       providers: [
+        {
+          inject: [DatabaseUserRepository],
+          provide: UsecasesProxyModule.USER_GET_USECASES_PROXY,
+          useFactory: (userRepository: DatabaseUserRepository) =>
+            new UseCaseProxy(new GetUserUseCases(userRepository))
+        },
         {
           inject: [
             JwtTokenService,
@@ -278,7 +286,8 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.NOTIFICATION_CREATE_PROXY,
         UsecasesProxyModule.NOTIFICATION_GET_PROXY,
         UsecasesProxyModule.NOTIFICATION_UPDATE_PROXY,
-        UsecasesProxyModule.INVITATION_CREATE_PROXY
+        UsecasesProxyModule.INVITATION_CREATE_PROXY,
+        UsecasesProxyModule.USER_GET_USECASES_PROXY
       ]
     }
   }
