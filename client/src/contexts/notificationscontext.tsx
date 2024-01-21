@@ -43,9 +43,11 @@ export const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!user) return
+    const controller = new AbortController()
+    const signal = controller.signal
     const fetchNotifications = async () => {
       try {
-        const { data } = await api.get('/notification')
+        const { data } = await api.get('/notification', { signal })
         setNotifications(data)
         if (data.length > 0) {
           setHavanewNotifications(true)
@@ -55,6 +57,9 @@ export const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
       }
     }
     fetchNotifications()
+    return () => {
+      controller.abort()
+    }
   }, [api, user])
 
   const clearNotification = () => {

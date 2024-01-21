@@ -21,6 +21,8 @@ const Calendar = () => {
   const api = useApi({ shouldRefreshToken: true })
 
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
     const [firstDay, lastDay] = getFirstAndLastDayOfMonth(monthIndex + 1)
 
     const fetchEvents = async () => {
@@ -30,7 +32,8 @@ const Calendar = () => {
           params: {
             inicialDate: firstDay,
             finalDate: lastDay
-          }
+          },
+          signal
         })
         let calendarEvents: CalendarEventType[] = []
         data.events.map((e: Event) => {
@@ -45,6 +48,9 @@ const Calendar = () => {
       }
     }
     fetchEvents()
+    return () => {
+      controller.abort()
+    }
   }, [api, monthIndex])
 
   useEffect(() => {

@@ -41,9 +41,11 @@ const EditEvent: FC = () => {
   })
 
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
     setIsFeating(true)
     const fetchEvent = async () => {
-      const res = await api.get(`/event/${id}`)
+      const res = await api.get(`/event/${id}`, { signal })
       const inicialDate = new Date(res.data.inicialDate)
       const finalDate = new Date(res.data.finalDate)
       setValue('name', res.data.name)
@@ -61,6 +63,9 @@ const EditEvent: FC = () => {
       setIsFeating(false)
     }
     fetchEvent()
+    return () => {
+      controller.abort()
+    }
   }, [api, id, setValue])
 
   const onCheck = async (data: FormType) => {

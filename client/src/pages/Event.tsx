@@ -27,10 +27,12 @@ const EventPage = () => {
   const navigate = useNavigate()
   useEffect(() => {
     if (!id) return navigate('/dashboard')
+    const controller = new AbortController()
+    const signal = controller.signal
     const fetchEvent = async () => {
       setIsLoding(true)
       try {
-        const { data } = await api.get(`/event/${id}`)
+        const { data } = await api.get(`/event/${id}`, { signal })
         setEvent(data)
       } catch (err) {
         toast({
@@ -42,6 +44,10 @@ const EventPage = () => {
       }
     }
     fetchEvent()
+
+    return () => {
+      controller.abort()
+    }
   }, [api, id, navigate])
 
   const toggleParticipation = async () => {

@@ -44,9 +44,11 @@ export const InvitationsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!user) return
+    const controller = new AbortController()
+    const signal = controller.signal
     const fetchNotifications = async () => {
       try {
-        const { data } = await api.get('/invitation')
+        const { data } = await api.get('/invitation', { signal })
         setInvitations(data)
         if (data.length > 0) {
           setHavenewInvitations(true)
@@ -56,6 +58,9 @@ export const InvitationsProvider: FC<PropsWithChildren> = ({ children }) => {
       }
     }
     fetchNotifications()
+    return () => {
+      controller.abort()
+    }
   }, [api, user])
 
   const clearInvitations = () => {
