@@ -121,6 +121,7 @@ export class EventController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   async getParticipantions(@Param('id') id: string) {
+    if (!id) return
     return this.GetEventUseCases.getInstance().getParticipations(+id)
   }
 

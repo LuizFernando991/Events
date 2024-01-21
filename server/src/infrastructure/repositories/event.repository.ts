@@ -104,15 +104,24 @@ export class DatabaseEventRepository implements EventRepository {
     if (options.inicialDate && options.finalDate) {
       where = {
         ...where,
-        AND: [
-          { finalDate: { gte: new Date(options.inicialDate) } },
-          { inicialDate: { lte: new Date(options.finalDate) } }
+        OR: [
+          {
+            AND: [
+              { inicialDate: { lte: new Date(options.finalDate) } },
+              { finalDate: { gte: new Date(options.inicialDate) } }
+            ]
+          },
+          {
+            AND: [
+              { finalDate: { gte: new Date(options.inicialDate) } },
+              { inicialDate: { lte: new Date(options.finalDate) } }
+            ]
+          }
         ]
       }
     }
 
     const totalEvents = await this.prisma.event.count({ where })
-
     const totalPages = Math.ceil(totalEvents / limit)
 
     const events = await this.prisma.event.findMany({
@@ -141,7 +150,6 @@ export class DatabaseEventRepository implements EventRepository {
         }
       }
     })
-
     return {
       events: events,
       pages: totalPages,
@@ -169,16 +177,25 @@ export class DatabaseEventRepository implements EventRepository {
     if (options.inicialDate && options.finalDate) {
       where = {
         ...where,
-        AND: [
-          { finalDate: { gte: new Date(options.inicialDate) } },
-          { inicialDate: { lte: new Date(options.finalDate) } }
+        OR: [
+          {
+            AND: [
+              { inicialDate: { lte: new Date(options.finalDate) } },
+              { finalDate: { gte: new Date(options.inicialDate) } }
+            ]
+          },
+          {
+            AND: [
+              { finalDate: { gte: new Date(options.inicialDate) } },
+              { inicialDate: { lte: new Date(options.finalDate) } }
+            ]
+          }
         ]
       }
     }
 
     const totalEvents = await this.prisma.event.count({ where })
     const totalPages = Math.ceil(totalEvents / limit)
-
     const events = await this.prisma.event.findMany({
       where,
       skip,
