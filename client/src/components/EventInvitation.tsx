@@ -59,7 +59,6 @@ const EventInvitation: FC<EventInvitationPropsType> = ({
   }
 
   const onSumit = async () => {
-    console.log(selectedUsersIds)
     try {
       setIsSubmitting(true)
       api.post('/invitation', { ids: selectedUsersIds, eventId })
@@ -69,7 +68,13 @@ const EventInvitation: FC<EventInvitationPropsType> = ({
         title: 'Oh não, algo deu errado, tente mais tarde!'
       })
     } finally {
+      toast({
+        variant: 'default',
+        title: 'Convite enviado!'
+      })
       setIsSubmitting(false)
+      setSelectedUsersIds([])
+      setIsOpen()
     }
   }
 

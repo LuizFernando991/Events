@@ -12,10 +12,12 @@ import { Participant } from '@/types/Participant'
 import EventParticipations from '@/components/EventParticipations'
 import useAuth from '@/hooks/useAuth'
 import EventInvitation from '@/components/EventInvitation'
+import useInvitations from '@/hooks/useInvitations'
 
 const EventPage = () => {
   const { id } = useParams()
   const { user } = useAuth()
+  const { respondInvitation } = useInvitations()
   const [isLoading, setIsLoding] = useState(false)
   const [inviteViewOpen, setInviteViewOpen] = useState(false)
   const [isToggleParticipation, setIsToggleParticipation] = useState(false)
@@ -42,7 +44,7 @@ const EventPage = () => {
       }
     }
     fetchEvent()
-  }, [api, id, navigate])
+  }, [api, id, navigate, respondInvitation])
 
   const toggleParticipation = async () => {
     try {

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button, buttonVariants } from './ui/button'
-import { ArrowRight, Bell, BellDot } from 'lucide-react'
+import { ArrowRight, Bell, BellDot, Mail, MailWarning } from 'lucide-react'
 import UserAccountNav from './UserAccountNav'
 import MobileNav from './MobileNav'
 import useAuth from '@/hooks/useAuth'
@@ -11,11 +11,19 @@ import {
 } from '@/components/ui/popover'
 import useNotification from '@/hooks/useNotifications'
 import NotificationCard from './NotificationCard'
+import useInvitations from '@/hooks/useInvitations'
+import InvitationCard from './InvitationCard'
 
 const Nav = () => {
   const { user, logout } = useAuth()
   const { notifications, haveNewNotifications, clearNotification } =
     useNotification()
+  const {
+    haveNewInvitations,
+    invitations,
+    respondInvitation,
+    clearInvitations
+  } = useInvitations()
   return (
     <nav className="h-15 bg-white">
       <div className="flex h-14 items-center justify-between border-b border-zinc-200 px-10">
@@ -23,6 +31,30 @@ const Nav = () => {
           <span className="text-primary font-bold">Events</span>
         </Link>
         <div className="flex items-center gap-4">
+          <Popover>
+            <PopoverTrigger asChild onClick={clearInvitations}>
+              <Button variant="ghost">
+                {!haveNewInvitations ? <Mail /> : <MailWarning />}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0">
+              {invitations.length === 0 ? (
+                <div className="p-4">Sem convites </div>
+              ) : (
+                ''
+              )}
+              <ul className="max-h-[400px] overflow-y-auto">
+                {invitations.map((inv) => (
+                  <InvitationCard
+                    invitation={inv}
+                    key={inv.id}
+                    respondInvitation={respondInvitation}
+                  />
+                ))}
+              </ul>
+            </PopoverContent>
+          </Popover>
+          <MobileNav isAuth={!!user} onLogout={logout} />
           <Popover>
             <PopoverTrigger asChild onClick={clearNotification}>
               <Button variant="ghost">
