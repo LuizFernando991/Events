@@ -10,7 +10,7 @@ import AlertEventDate from '@/components/AlertEventDate'
 const EditEvent: FC = () => {
   const currentDate = new Date()
   const [title, setTitle] = useState('')
-  const [defaultFinalTime, setDefaultFinalTime] = useState('00:00')
+  const [defaultFinalTime, setDefaultFinalTime] = useState('')
   const [defaultInicialTime, setDefaultInicialTipe] = useState('')
   const [defaultDate, setDefaultDate] = useState({
     defautInicialDate: currentDate,
