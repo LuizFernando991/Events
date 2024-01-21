@@ -7,6 +7,7 @@ import {
 import { Socket } from 'socket.io'
 import { Notification } from 'src/domain/model/notification'
 import { SocketEmitterInterface } from 'src/domain/socket/SocketEmitter'
+import { InvitationRes } from 'src/domain/types/invitation.types'
 
 const corsOptions = {
   origin: 'http://localhost:5173',
@@ -38,5 +39,9 @@ export class SocketGateway
 
   emitNotification(userId: number, data: Notification) {
     this.server.to(`${userId}`).emit('notification', data)
+  }
+
+  emitInvitation(userId: number, data: InvitationRes): void {
+    this.server.to(`${userId}`).emit('invitation', data)
   }
 }

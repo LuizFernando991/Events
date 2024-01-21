@@ -373,6 +373,7 @@ export class DatabaseEventRepository implements EventRepository {
       select: {
         participants: {
           select: {
+            id: true,
             name: true,
             username: true
           }
