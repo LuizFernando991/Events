@@ -1,3 +1,4 @@
+import useAuth from '@/hooks/useAuth'
 import { createContext, useEffect, FC, PropsWithChildren } from 'react'
 import io, { Socket } from 'socket.io-client'
 
@@ -8,6 +9,7 @@ export type SocketProviderType = {
 export const SocketContext = createContext({} as SocketProviderType)
 
 export const SocketProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { user } = useAuth()
   const socket = io(import.meta.env.VITE_SOCKET_KEY, {
     withCredentials: true
   })
@@ -16,7 +18,8 @@ export const SocketProvider: FC<PropsWithChildren> = ({ children }) => {
     return () => {
       socket.disconnect()
     }
-  }, [socket])
+  }, [socket, user])
+
   return (
     <SocketContext.Provider value={{ socket }}>
       {children}
