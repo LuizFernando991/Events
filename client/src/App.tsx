@@ -1,5 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/authcontext'
+import { SocketProvider } from './contexts/socketcontext'
+import { NotificationsProvider } from './contexts/notificationscontext'
+import { InvitationsProvider } from './contexts/invitationcontext'
+import Calendar from './pages/Calendar'
 import NavLayout from './layouts/NavLayout'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -9,10 +13,7 @@ import Dashboard from './pages/Dashboard'
 import CreateEvent from './pages/CreateEvent'
 import EditEvent from './pages/EditEvent'
 import EventPage from './pages/Event'
-import { SocketProvider } from './contexts/socketcontext'
-import { NotificationsProvider } from './contexts/notificationscontext'
-import { InvitationsProvider } from './contexts/invitationcontext'
-import Calendar from './pages/Calendar'
+import NewEvents from './pages/NewEvents'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/" element={<ProtectRoutes />}>
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/events/" element={<NewEvents />} />
                     <Route path="/events/create" element={<CreateEvent />} />
                     <Route path="/event/:id" element={<EventPage />} />
                     <Route path="/event/edit/:id" element={<EditEvent />} />

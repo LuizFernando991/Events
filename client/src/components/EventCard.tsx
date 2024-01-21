@@ -10,7 +10,7 @@ import useAuth from '@/hooks/useAuth'
 type EventCardPropsType = {
   event: Event
   isLoading: boolean
-  onDelete: (id: number) => void
+  onDelete?: (id: number) => void
 }
 
 const EventCard: FC<EventCardPropsType> = ({ event, isLoading, onDelete }) => {
@@ -64,19 +64,20 @@ const EventCard: FC<EventCardPropsType> = ({ event, isLoading, onDelete }) => {
             >
               <Edit />
             </Button>
-
-            <Button
-              onClick={isLoading ? () => {} : () => onDelete(event.id)}
-              size="sm"
-              className="w-full"
-              variant="destructive"
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Trash className="h-4 w-4" />
-              )}
-            </Button>
+            {onDelete && (
+              <Button
+                onClick={isLoading ? () => {} : () => onDelete(event.id)}
+                size="sm"
+                className="w-full"
+                variant="destructive"
+              >
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash className="h-4 w-4" />
+                )}
+              </Button>
+            )}
           </>
         )}
       </div>
