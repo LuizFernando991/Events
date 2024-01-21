@@ -177,14 +177,23 @@ export class UsecasesProxyModule {
             )
         },
         {
-          inject: [DatabaseEventRepository, ExceptionsService],
+          inject: [
+            DatabaseEventRepository,
+            ExceptionsService,
+            DatabaseInvitationRepository
+          ],
           provide: UsecasesProxyModule.EVENT_PARTICIPATE_PROXY,
           useFactory: (
             eventRepository: EventRepository,
-            exceptionService: ExceptionsService
+            exceptionService: ExceptionsService,
+            invitationRepository: InvitationRepository
           ) =>
             new UseCaseProxy(
-              new ParticipateEventUseCases(eventRepository, exceptionService)
+              new ParticipateEventUseCases(
+                eventRepository,
+                exceptionService,
+                invitationRepository
+              )
             )
         },
         {

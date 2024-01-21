@@ -1,10 +1,12 @@
 import { IException } from 'src/domain/exceptions/exceptions.interface'
 import { EventRepository } from 'src/domain/repositories/eventRepositoryInterface'
+import { InvitationRepository } from 'src/domain/repositories/invitationRepositoryInterface'
 
 export class ParticipateEventUseCases {
   constructor(
     private readonly eventRepository: EventRepository,
-    private readonly exceptionService: IException
+    private readonly exceptionService: IException,
+    private readonly invitationRepository: InvitationRepository
   ) {}
 
   async participate(id: number, userId: number) {
@@ -21,6 +23,7 @@ export class ParticipateEventUseCases {
       event.userIsParticipates
     )
 
+    //Removing invitations
     return newEvent
   }
 }
