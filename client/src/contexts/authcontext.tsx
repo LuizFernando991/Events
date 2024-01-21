@@ -74,7 +74,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       token = data.activationToken
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.log(err)
+      // console.log(err)
       if (err.response?.status === 400) {
         toast({
           variant: 'destructive',

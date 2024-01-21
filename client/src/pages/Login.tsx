@@ -43,7 +43,7 @@ const Login: FC = () => {
       setIsLoading(true)
       login(data)
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     } finally {
       setIsLoading(false)
     }

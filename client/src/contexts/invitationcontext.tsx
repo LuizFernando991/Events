@@ -47,7 +47,6 @@ export const InvitationsProvider: FC<PropsWithChildren> = ({ children }) => {
       try {
         const { data } = await api.get('/invitation')
         setInvitations(data)
-        console.log(data)
         if (data.length > 0) {
           setHavenewInvitations(true)
         }
@@ -68,7 +67,6 @@ export const InvitationsProvider: FC<PropsWithChildren> = ({ children }) => {
     accept: boolean
   ): Promise<void> => {
     try {
-      console.log(accept)
       await api.put('/invitation', { invitationId, accept })
       const updatedInvites = invitations.map((e) => {
         if (e.id === invitationId) {
