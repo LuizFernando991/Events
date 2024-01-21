@@ -1,4 +1,3 @@
-// import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/authcontext'
 import NavLayout from './layouts/NavLayout'
@@ -13,6 +12,7 @@ import EventPage from './pages/Event'
 import { SocketProvider } from './contexts/socketcontext'
 import { NotificationsProvider } from './contexts/notificationscontext'
 import { InvitationsProvider } from './contexts/invitationcontext'
+import Calendar from './pages/Calendar'
 
 function App() {
   return (
@@ -31,6 +31,7 @@ function App() {
                     <Route path="/events/create" element={<CreateEvent />} />
                     <Route path="/event/:id" element={<EventPage />} />
                     <Route path="/event/edit/:id" element={<EditEvent />} />
+                    <Route path="/calendar" element={<Calendar />} />
                   </Route>
                 </Route>
               </Routes>

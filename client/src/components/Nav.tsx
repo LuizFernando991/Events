@@ -1,6 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, buttonVariants } from './ui/button'
-import { ArrowRight, Bell, BellDot, Mail, MailWarning } from 'lucide-react'
+import {
+  ArrowRight,
+  Bell,
+  BellDot,
+  CalendarDays,
+  Mail,
+  MailWarning
+} from 'lucide-react'
 import UserAccountNav from './UserAccountNav'
 import MobileNav from './MobileNav'
 import useAuth from '@/hooks/useAuth'
@@ -15,6 +22,7 @@ import useInvitations from '@/hooks/useInvitations'
 import InvitationCard from './InvitationCard'
 
 const Nav = () => {
+  const navigate = useNavigate()
   const { user, logout } = useAuth()
   const { notifications, haveNewNotifications, clearNotification } =
     useNotification()
@@ -31,6 +39,14 @@ const Nav = () => {
           <span className="text-primary font-bold">Events</span>
         </Link>
         <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              navigate('/calendar')
+            }}
+          >
+            <CalendarDays />
+          </Button>
           <Popover>
             <PopoverTrigger asChild onClick={clearInvitations}>
               <Button variant="ghost">
@@ -54,7 +70,6 @@ const Nav = () => {
               </ul>
             </PopoverContent>
           </Popover>
-          <MobileNav isAuth={!!user} onLogout={logout} />
           <Popover>
             <PopoverTrigger asChild onClick={clearNotification}>
               <Button variant="ghost">
