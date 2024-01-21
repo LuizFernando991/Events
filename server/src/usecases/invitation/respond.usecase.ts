@@ -9,7 +9,7 @@ export class RespondInvitationUseCases {
     private readonly exceptionService: IException
   ) {}
 
-  async respond(userId: number, invitationId: number) {
+  async respond(userId: number, invitationId: number, accept: boolean) {
     if (!invitationId || typeof invitationId !== 'number') {
       this.exceptionService.badRequestException({
         message: 'invalid id'
@@ -35,6 +35,8 @@ export class RespondInvitationUseCases {
       })
     }
 
+    await this.invitationRepository.respondInvitation(invitationId, accept)
+
     const event = await this.eventRepository.getEvent(
       invitation.eventId,
       userId
@@ -47,12 +49,15 @@ export class RespondInvitationUseCases {
       })
     }
 
-    const newEvent = await this.eventRepository.participateEvent(
-      invitation.eventId,
-      userId,
-      event.userIsParticipates
-    )
+    if (accept) {
+      await this.eventRepository.participateEvent(
+        invitation.eventId,
+        userId,
+        event.userIsParticipates
+      )
+      return
+    }
 
-    return newEvent
+    return
   }
 }

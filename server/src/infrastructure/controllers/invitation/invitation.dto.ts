@@ -1,4 +1,10 @@
-import { IsInt, ArrayMinSize, IsArray, IsNotEmpty } from 'class-validator'
+import {
+  IsInt,
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+  IsBoolean
+} from 'class-validator'
 
 export class CreateInvitationDto {
   @IsArray()
@@ -18,4 +24,8 @@ export class RespondInvitationDto {
   @IsInt()
   @IsNotEmpty()
   invitationId: number
+
+  @IsBoolean()
+  @IsNotEmpty()
+  accept: boolean
 }
