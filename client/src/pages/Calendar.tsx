@@ -9,6 +9,7 @@ import { getMonth } from '@/helpers/getCalendarMouth'
 import Month from '@/components/Calendar/Month'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { CalendarEventType } from '@/types/CalendatEventType'
+import { Button } from '@/components/ui/button'
 
 const Calendar = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -20,7 +21,8 @@ const Calendar = () => {
   const api = useApi({ shouldRefreshToken: true })
 
   useEffect(() => {
-    const { firstDay, lastDay } = getFirstAndLastDayOfMonth(3)
+    const [firstDay, lastDay] = getFirstAndLastDayOfMonth(monthIndex + 1)
+
     const fetchEvents = async () => {
       setIsLoading(true)
       try {
@@ -57,19 +59,21 @@ const Calendar = () => {
       ) : (
         <main className="mx-auto max-w-7xl mt-10 w-full bg-white flex flex-col">
           <header className="px-4 py-2 flex items-center">
-            <button onClick={() => setMonthIndex((prev) => prev - 1)}>
-              <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-                <ArrowLeft />
-              </span>
-            </button>
-            <h2 className="ml-4 text-xl text-gray-500 font-bold">
+            <Button
+              variant="ghost"
+              onClick={() => setMonthIndex((prev) => prev - 1)}
+            >
+              <ArrowLeft />
+            </Button>
+            <h2 className="mx-4 text-xl text-gray-500 font-bold">
               {dayjs(new Date(dayjs().year(), monthIndex)).format('MMMM YYYY')}
             </h2>
-            <button onClick={() => setMonthIndex((prev) => prev + 1)}>
-              <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-                <ArrowRight />
-              </span>
-            </button>
+            <Button
+              variant="ghost"
+              onClick={() => setMonthIndex((prev) => prev + 1)}
+            >
+              <ArrowRight />
+            </Button>
           </header>
           <div className="flex flex-1">
             <Month month={currentMouth} events={events} />

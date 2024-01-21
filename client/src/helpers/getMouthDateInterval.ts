@@ -9,8 +9,5 @@ export default function getFirstAndLastDayOfMonth(month: number) {
 
   const lastDay = endOfMonth(new Date(currentYear, month - 1))
 
-  return {
-    firstDay,
-    lastDay
-  }
+  return [firstDay, lastDay]
 }
