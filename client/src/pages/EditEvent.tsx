@@ -10,6 +10,8 @@ import AlertEventDate from '@/components/AlertEventDate'
 const EditEvent: FC = () => {
   const currentDate = new Date()
   const [title, setTitle] = useState('')
+  const [defaultFinalTime, setDefaultFinalTime] = useState('00:00')
+  const [defaultInicialTime, setDefaultInicialTipe] = useState('')
   const [defaultDate, setDefaultDate] = useState({
     defautInicialDate: currentDate,
     defaultFinalDate: currentDate
@@ -30,7 +32,9 @@ const EditEvent: FC = () => {
       name: '',
       description: '',
       inicialDate: undefined,
-      finalDate: undefined
+      finalDate: undefined,
+      inicialTime: '',
+      finalTime: ''
     }
   })
 
@@ -48,6 +52,8 @@ const EditEvent: FC = () => {
         defautInicialDate: inicialDate,
         defaultFinalDate: finalDate
       })
+      setDefaultFinalTime(res.data.finalTime)
+      setDefaultInicialTipe(res.data.inicialTime)
     }
     fetchEvent()
   }, [api, id, setValue])
@@ -125,6 +131,8 @@ const EditEvent: FC = () => {
         setValue={setValue}
         defaultDate={defaultDate}
         isLoading={isLoading}
+        defaultFinalTime={defaultFinalTime}
+        defaultInicialTime={defaultInicialTime}
         submitButtonTitle="Salvar"
       />
       <AlertEventDate

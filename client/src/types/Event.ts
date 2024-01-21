@@ -8,6 +8,8 @@ export type Event = {
   inicialDate: Date
   finalDate: Date
   creatorId: number
+  inicialTime: string
+  finalTime: string
   creator?: Partial<User>
   participants?: Partial<User>[]
   userIsParticipates?: boolean
@@ -18,4 +20,6 @@ export type FormType = {
   description: string
   inicialDate: Date | undefined
   finalDate: Date | undefined
+  inicialTime: string
+  finalTime: string
 }

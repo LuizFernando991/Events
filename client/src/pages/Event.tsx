@@ -177,6 +177,17 @@ const EventPage = () => {
             htmlFor="date"
             className="flex items-center gap-4 text-primary font-bold text-xl"
           >
+            Horário do evento:
+          </Label>
+          <p className="text-semibold text-primary">
+            {event.inicialTime} até {event.finalTime}
+          </p>
+        </div>
+        <div className="w-full flex flex-col space-y-1.5 items-center mt-20">
+          <Label
+            htmlFor="date"
+            className="flex items-center gap-4 text-primary font-bold text-xl"
+          >
             Mais sobre esse evento:
           </Label>
           <p className="w-full py-10 sm:px-40 sm:py-20 whitespace-pre-wrap break-words">

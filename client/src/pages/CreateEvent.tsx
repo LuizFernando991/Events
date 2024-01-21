@@ -25,12 +25,22 @@ const CreateEvent: FC = () => {
       name: '',
       description: '',
       inicialDate: currentDate,
-      finalDate: currentDate
+      finalDate: currentDate,
+      inicialTime: '',
+      finalTime: ''
     }
   })
 
   const onCheck = async (data: FormType) => {
     setIsLoading(true)
+    if (!data.inicialTime || !data.finalDate) {
+      toast({
+        variant: 'destructive',
+        title: 'Selecione um horário!'
+      })
+      setIsLoading(false)
+      return
+    }
     if (!data.inicialDate) {
       toast({
         variant: 'destructive',
@@ -49,12 +59,27 @@ const CreateEvent: FC = () => {
     }
 
     try {
+      const inicialTimeHourMin = data.inicialTime.split(':')
+      const finalTimeHourMin = data.finalTime.split(':')
+      data.inicialDate!.setHours(
+        parseInt(inicialTimeHourMin[0]),
+        parseInt(inicialTimeHourMin[1])
+      )
+      data.finalDate
+        ? data.finalDate.setHours(
+            parseInt(finalTimeHourMin[0]),
+            parseInt(finalTimeHourMin[1])
+          )
+        : data.inicialDate!.setHours(
+            parseInt(inicialTimeHourMin[0]),
+            parseInt(inicialTimeHourMin[1])
+          )
       const res = await api.get('/event/geteventsuserparticipates', {
         params: {
-          inicialDate: data.inicialDate.toDateString(),
+          inicialDate: data.inicialDate.toString(),
           finalDate: data.finalDate
-            ? data.finalDate.toDateString()
-            : data.inicialDate.toDateString()
+            ? data.finalDate.toString()
+            : data.inicialDate.toString()
         }
       })
       if (res.data.events.length) {
@@ -71,12 +96,27 @@ const CreateEvent: FC = () => {
   const onSubmit = async (data: FormType) => {
     try {
       setIsLoading(true)
+      const inicialTimeHourMin = data.inicialTime.split(':')
+      const finalTimeHourMin = data.finalTime.split(':')
+      data.inicialDate!.setHours(
+        parseInt(inicialTimeHourMin[0]),
+        parseInt(inicialTimeHourMin[1])
+      )
+      data.finalDate
+        ? data.finalDate.setHours(
+            parseInt(finalTimeHourMin[0]),
+            parseInt(finalTimeHourMin[1])
+          )
+        : data.inicialDate!.setHours(
+            parseInt(inicialTimeHourMin[0]),
+            parseInt(inicialTimeHourMin[1])
+          )
       await api.post('/event', {
         ...data,
-        inicialDate: data.inicialDate!.toDateString(),
+        inicialDate: data.inicialDate!.toString(),
         finalDate: data.finalDate
-          ? data.finalDate.toDateString()
-          : data.inicialDate!.toDateString()
+          ? data.finalDate.toString()
+          : data.inicialDate!.toString()
       })
       navigate('/dashboard')
     } catch (err) {

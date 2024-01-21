@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { FormType } from '@/types/Event'
+import { TimePicker } from 'antd'
+import dayjs from 'dayjs'
 
 type EventFormPropsType = {
   handleSubmit: () => void
@@ -21,6 +23,8 @@ type EventFormPropsType = {
     defautInicialDate: Date
     defaultFinalDate: Date
   }
+  defaultFinalTime?: string
+  defaultInicialTime?: string
   submitButtonTitle?: string
 }
 
@@ -31,14 +35,22 @@ const EventForm: FC<EventFormPropsType> = ({
   setValue,
   isLoading,
   defaultDate,
+  defaultInicialTime,
+  defaultFinalTime,
   submitButtonTitle = 'Criar'
 }) => {
   const [date, setDate] = useState<DateRange | undefined>(undefined)
+  const [time, setTime] = useState<string[]>([])
 
   useEffect(() => {
     setValue('inicialDate', date?.from)
     setValue('finalDate', date?.to)
   }, [date, setValue])
+
+  useEffect(() => {
+    setValue('inicialTime', time[0])
+    setValue('finalTime', time[1])
+  }, [setValue, time])
 
   useEffect(() => {
     setDate(
@@ -50,6 +62,11 @@ const EventForm: FC<EventFormPropsType> = ({
         : undefined
     )
   }, [defaultDate])
+
+  useEffect(() => {
+    if (defaultFinalTime && defaultInicialTime)
+      setTime([defaultInicialTime, defaultFinalTime])
+  }, [defaultFinalTime, defaultInicialTime])
 
   const formatedDateFrom = date?.from ? format(date?.from, 'dd, LLL, y') : null
   const formatedDateTo = date?.to ? format(date?.to, 'dd, LLL, y') : null
@@ -117,6 +134,38 @@ const EventForm: FC<EventFormPropsType> = ({
             {errors['inicialDate']?.message || 'placeholder error'}
           </p>
         </div>
+      </div>
+      <div className="flex flex-col space-y-1.5 w-full">
+        <Label htmlFor="description">
+          Em qual horário seu evento acontece?{' '}
+        </Label>
+        <TimePicker.RangePicker
+          format={'HH:mm'}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          value={
+            time[0] && time[1]
+              ? time.map((e) => {
+                  return dayjs(e + ':00', 'HH:mm:ss')
+                })
+              : undefined
+          }
+          onChange={(value) => {
+            if (value) {
+              const stringsTime = value.map((obj) => {
+                return obj ? `${obj.format('HH:mm:00')}` : ''
+              })
+              setTime(stringsTime)
+            } else {
+              setTime(['', ''])
+            }
+          }}
+        />
+        <p
+          className={`text-sm text-rose-400 ${errors['description']?.message ? ' ' : 'invisible'}`}
+        >
+          {errors['description']?.message || 'placeholder error'}
+        </p>
       </div>
       <div className="flex flex-col space-y-1.5 w-full">
         <Label htmlFor="description">Descreva seu evento: </Label>
