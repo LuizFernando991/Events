@@ -44,6 +44,8 @@ model Event {
 enum NotificationType {
   canceled
   updated
+  rejectInvitation
+  acceptInvitation
 }
 
 model Notification {

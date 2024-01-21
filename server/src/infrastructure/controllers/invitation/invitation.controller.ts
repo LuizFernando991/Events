@@ -59,6 +59,6 @@ export class InvitationController {
   ) {
     return this.invitationRespondUseCase
       .getInstance()
-      .respond(user.id, data.invitationId, !!data.accept)
+      .respond(user, data.invitationId, !!data.accept)
   }
 }

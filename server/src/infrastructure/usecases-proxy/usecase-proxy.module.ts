@@ -271,19 +271,25 @@ export class UsecasesProxyModule {
           inject: [
             DatabaseEventRepository,
             DatabaseInvitationRepository,
-            ExceptionsService
+            ExceptionsService,
+            DatabaseNotificationRepository,
+            SocketGateway
           ],
           provide: UsecasesProxyModule.INVITATION_RESPOND_PROXY,
           useFactory: (
             eventRepository: EventRepository,
             invitationRepository: InvitationRepository,
-            exceptionService: ExceptionsService
+            exceptionService: ExceptionsService,
+            notificationRepository: NotificationRepository,
+            socketService: SocketGateway
           ) =>
             new UseCaseProxy(
               new RespondInvitationUseCases(
                 eventRepository,
                 invitationRepository,
-                exceptionService
+                exceptionService,
+                notificationRepository,
+                socketService
               )
             )
         },
