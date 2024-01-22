@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Event } from '@/types/Event'
 
+// Get every event and transfor in Calendary object to show in screen
+
 const colorMap: Record<number, string> = {}
 const colorPalette = ['#ae1637', '#008b00', '#0089a2', '#451c4b', '#ff2d1f']
 

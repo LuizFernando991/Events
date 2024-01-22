@@ -1,3 +1,4 @@
+// creating a array to pagination component
 const createPaginationArray = (currentPage: number, totalPages: number) => {
   const array = []
 

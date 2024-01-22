@@ -1,3 +1,4 @@
+// Returns a String through date
 const getSepareteDate = (date: string | Date) => {
   const m = [
     'JAN',

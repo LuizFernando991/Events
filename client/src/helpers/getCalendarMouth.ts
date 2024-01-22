@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 
+// Getting all days in the month
+
 export function getMonth(month = dayjs().month()) {
   month = Math.floor(month)
   const year = dayjs().year()

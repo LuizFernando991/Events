@@ -1,5 +1,5 @@
 import { startOfMonth, endOfMonth, getYear } from 'date-fns'
-
+// Getting date in first and last days of the month
 export default function getFirstAndLastDayOfMonth(month: number) {
   month = Math.min(Math.max(1, month), 12)
 
