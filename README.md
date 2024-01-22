@@ -3,7 +3,7 @@
 ## Backend
 
 
-first open the backend folder and:
+first open the server folder and:
 
 1 - Fill the .env file with the following variables (you can copy and paste .env.example and rename to .env):
 ```dotenv
@@ -31,7 +31,7 @@ ps: I used postgresSQL to this project
 
 ## Frontend
 
-first open the frontend folder and: 
+first open the client folder and: 
 
 1 - Fill the .env file with the following variables (you can copy and paste .env.example and rename to .env):
 ```dotenv
