@@ -6,7 +6,7 @@ import { IJwtServicePayload } from 'src/domain/adapters/jwt.interface'
 export class AuthRequest extends Request {
   user: IJwtServicePayload
 }
-
+// Getting currentUser
 export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext): IJwtServicePayload => {
     const request = context.switchToHttp().getRequest<AuthRequest>()

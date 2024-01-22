@@ -71,6 +71,7 @@ export class RegisterUseCases {
     return { activationToken }
   }
 
+  //saving user after code validation
   async saveUser(activationToken: string, code: string) {
     const secret = this.enviromentConfig.getJwtSecret()
     const payload = await this.jwtTokenService.checkActiovationToken(

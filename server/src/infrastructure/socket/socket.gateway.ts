@@ -9,6 +9,7 @@ import { Notification } from 'src/domain/model/notification'
 import { SocketEmitterInterface } from 'src/domain/socket/SocketEmitter'
 import { InvitationRes } from 'src/domain/types/invitation.types'
 
+//cors config
 const corsOptions = {
   origin: 'http://localhost:5173',
   allowedHeaders: ['Content-Type', 'Authorization'],

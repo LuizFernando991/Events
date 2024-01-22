@@ -35,7 +35,7 @@ import { CreateInvitationUseCases } from 'src/usecases/invitation/create.usecase
 import { RespondInvitationUseCases } from 'src/usecases/invitation/respond.usecase'
 import { GetUserUseCases } from 'src/usecases/user/get.usecases'
 import { GetInvitationUseCases } from 'src/usecases/invitation/get.usecase'
-
+// Used to inject dependecies in useCases
 @Module({
   imports: [
     EnvironmentConfigModule,
