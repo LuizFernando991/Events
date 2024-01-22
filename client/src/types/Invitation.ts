@@ -1,3 +1,5 @@
+import { Event } from './Event'
+
 export type Invitation = {
   id: number
   eventId: number
@@ -14,4 +16,5 @@ export type Invitation = {
     name: string
     username: string
   }
+  event: Event
 }

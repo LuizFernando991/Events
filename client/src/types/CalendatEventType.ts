@@ -3,4 +3,5 @@ export type CalendarEventType = {
   label: string
   day: number
   eventId: number
+  isPending?: boolean
 }

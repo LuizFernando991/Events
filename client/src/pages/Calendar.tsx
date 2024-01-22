@@ -10,16 +10,18 @@ import Month from '@/components/Calendar/Month'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { CalendarEventType } from '@/types/CalendatEventType'
 import { Button } from '@/components/ui/button'
+import useInvitations from '@/hooks/useInvitations'
 
 const Calendar = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [monthIndex, setMonthIndex] = useState(dayjs().month())
   const [events, setEvents] = useState<CalendarEventType[]>([])
+  const [pendingEvents, setPendingEvents] = useState<CalendarEventType[]>([])
   const [currentMouth, setCurrentMonth] = useState<
     dayjs.Dayjs[][] | undefined
   >()
   const api = useApi({ shouldRefreshToken: true })
-
+  const { invitations } = useInvitations()
   useEffect(() => {
     const controller = new AbortController()
     const signal = controller.signal
@@ -58,6 +60,23 @@ const Calendar = () => {
     setCurrentMonth(m)
   }, [monthIndex])
 
+  useEffect(() => {
+    let calendarEvents: CalendarEventType[] = []
+    invitations.map((inv) => {
+      if (inv.status === 'opening') {
+        const formatedEvents = generateEventObjects(
+          inv.event,
+          monthIndex + 1,
+          true
+        )
+        calendarEvents = calendarEvents.concat(formatedEvents)
+      }
+      return
+    })
+    setPendingEvents((e) => [...e, ...calendarEvents])
+  }, [invitations, monthIndex])
+
+  const allEvents = [...events, ...pendingEvents]
   return (
     <>
       {isLoading ? (
@@ -82,7 +101,7 @@ const Calendar = () => {
             </Button>
           </header>
           <div className="flex flex-1">
-            <Month month={currentMouth} events={events} />
+            <Month month={currentMouth} events={allEvents} />
           </div>
         </main>
       )}

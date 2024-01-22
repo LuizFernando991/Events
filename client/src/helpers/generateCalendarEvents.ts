@@ -2,7 +2,7 @@
 import { Event } from '@/types/Event'
 
 const colorMap: Record<number, string> = {}
-const colorPalette = ['#FFFF00', '#00FF00', '#FF0000', '#0000FF', '#800080']
+const colorPalette = ['#ae1637', '#008b00', '#0089a2', '#451c4b', '#ff2d1f']
 
 function getColorByEventId(eventId: number) {
   // Verifica se já foi atribuída uma cor para o evento
@@ -16,7 +16,8 @@ function getColorByEventId(eventId: number) {
 
 export default function generateEventObjects(
   event: Event,
-  targetMonth: number
+  targetMonth: number,
+  isPending?: boolean
 ) {
   const eventObjects = []
   const startDate = new Date(event.inicialDate)
@@ -34,7 +35,8 @@ export default function generateEventObjects(
         title: event.name,
         label: getColorByEventId(event.id),
         day: currentDay.getTime(),
-        eventId: event.id
+        eventId: event.id,
+        isPending: !!isPending
       }
 
       eventObjects.push(eventObject)

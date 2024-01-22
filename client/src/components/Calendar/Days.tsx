@@ -43,6 +43,7 @@ const Day: FC<DayPropsType> = ({ day, rowIdx, events }) => {
             style={{ backgroundColor: evt.label }}
             className={`p-1 mr-3 text-white text-[10px] md:text-sm rounded mb-1 truncate cursor-pointer`}
           >
+            {evt.isPending ? '(CONVITE) ' : ''}
             {evt.title}
           </div>
         ))}
