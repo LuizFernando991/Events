@@ -78,7 +78,22 @@ const EditEvent: FC = () => {
       setIsLoading(false)
       return
     }
-    if (data.inicialDate < new Date(currentDate.setHours(0, 0, 0, 0))) {
+    const inicialTimeHourMin = data.inicialTime.split(':')
+    const finalTimeHourMin = data.finalTime.split(':')
+    data.inicialDate!.setHours(
+      parseInt(inicialTimeHourMin[0]),
+      parseInt(inicialTimeHourMin[1])
+    )
+    data.finalDate
+      ? data.finalDate.setHours(
+          parseInt(finalTimeHourMin[0]),
+          parseInt(finalTimeHourMin[1])
+        )
+      : data.inicialDate!.setHours(
+          parseInt(inicialTimeHourMin[0]),
+          parseInt(inicialTimeHourMin[1])
+        )
+    if (data.inicialDate < new Date(currentDate)) {
       toast({
         variant: 'destructive',
         title: 'A data de início não pode ser anterior a hoje!'
@@ -107,13 +122,28 @@ const EditEvent: FC = () => {
 
   const onSubmit = async (data: FormType) => {
     setIsLoading(true)
+    const inicialTimeHourMin = data.inicialTime.split(':')
+    const finalTimeHourMin = data.finalTime.split(':')
+    data.inicialDate!.setHours(
+      parseInt(inicialTimeHourMin[0]),
+      parseInt(inicialTimeHourMin[1])
+    )
+    data.finalDate
+      ? data.finalDate.setHours(
+          parseInt(finalTimeHourMin[0]),
+          parseInt(finalTimeHourMin[1])
+        )
+      : data.inicialDate!.setHours(
+          parseInt(inicialTimeHourMin[0]),
+          parseInt(inicialTimeHourMin[1])
+        )
     try {
       await api.put(`/event/${id}`, {
         ...data,
-        inicialDate: data.inicialDate!.toDateString(),
+        inicialDate: data.inicialDate!.toString(),
         finalDate: data.finalDate
-          ? data.finalDate.toDateString()
-          : data.inicialDate!.toDateString()
+          ? data.finalDate.toString()
+          : data.inicialDate!.toString()
       })
       navigate(`/event/${id}`)
     } catch (err) {
