@@ -3,7 +3,7 @@ import generateEventObjects from '@/helpers/generateCalendarEvents'
 import getFirstAndLastDayOfMonth from '@/helpers/getMouthDateInterval'
 import { useApi } from '@/hooks/useApi'
 import { Event } from '@/types/Event'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import { getMonth } from '@/helpers/getCalendarMouth'
 import Month from '@/components/Calendar/Month'
@@ -73,10 +73,13 @@ const Calendar = () => {
       }
       return
     })
-    setPendingEvents((e) => [...e, ...calendarEvents])
+    setPendingEvents(calendarEvents)
   }, [invitations, monthIndex])
 
-  const allEvents = [...events, ...pendingEvents]
+  const allEvents = useMemo(
+    () => events.concat(pendingEvents),
+    [events, pendingEvents]
+  )
   return (
     <>
       {isLoading ? (
