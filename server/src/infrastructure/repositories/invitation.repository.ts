@@ -32,6 +32,22 @@ export class DatabaseInvitationRepository implements InvitationRepository {
             name: true,
             username: true
           }
+        },
+        event: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true,
+            finalDate: true,
+            inicialDate: true,
+            inicialTime: true,
+            finalTime: true,
+            creator: {
+              select: { id: true, name: true, username: true }
+            }
+          }
         }
       }
     })
@@ -64,6 +80,22 @@ export class DatabaseInvitationRepository implements InvitationRepository {
             name: true,
             username: true
           }
+        },
+        event: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true,
+            finalDate: true,
+            inicialDate: true,
+            inicialTime: true,
+            finalTime: true,
+            creator: {
+              select: { id: true, name: true, username: true }
+            }
+          }
         }
       }
     })
@@ -94,6 +126,22 @@ export class DatabaseInvitationRepository implements InvitationRepository {
             id: true,
             name: true,
             username: true
+          }
+        },
+        event: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true,
+            finalDate: true,
+            inicialDate: true,
+            inicialTime: true,
+            finalTime: true,
+            creator: {
+              select: { id: true, name: true, username: true }
+            }
           }
         }
       }

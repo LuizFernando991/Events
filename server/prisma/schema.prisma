@@ -39,6 +39,7 @@ model Event {
   creator       User           @relation(fields: [creatorId], references: [id], name: "evetsAsCreator")
   participants  User[]         @relation(name: "evetsAsParticipant")
   notifications Notification[]
+  Invitation    Invitation[]
 }
 
 enum NotificationType {
@@ -75,6 +76,7 @@ model Invitation {
   fromUserId Int
   toUserId   Int
 
-  toUser   User @relation(fields: [toUserId], references: [id], name: "asReceiver", onDelete: Cascade)
-  fromUser User @relation(fields: [fromUserId], references: [id], name: "asSender", onDelete: Cascade)
+  toUser   User  @relation(fields: [toUserId], references: [id], name: "asReceiver", onDelete: Cascade)
+  fromUser User  @relation(fields: [fromUserId], references: [id], name: "asSender", onDelete: Cascade)
+  event    Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }

@@ -1,3 +1,5 @@
+import { Event } from '../model/event'
+
 export type RegisterInvitationType = {
   eventId: number
   fromUserId: number
@@ -20,4 +22,5 @@ export type InvitationRes = {
     name: string
     username: string
   }
+  event: Event
 }

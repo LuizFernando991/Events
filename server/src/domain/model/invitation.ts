@@ -1,3 +1,4 @@
+import { Event } from './event'
 import { UserWithoutPassword } from './user'
 
 export class Invitation {
@@ -9,4 +10,5 @@ export class Invitation {
 
   toUser: UserWithoutPassword
   fromUser = UserWithoutPassword
+  event = Event
 }
